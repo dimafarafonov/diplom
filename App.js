@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Home from "./screens/home";
 import Map from "./screens/map";
+import Auth from "./screens/auth";
 import firebaseConfig from "./config/firebase";
 import friendReducer from "./FriendReducer";
 import * as Permissions from 'expo-permissions';
@@ -18,20 +19,15 @@ import { createCompatNavigatorFactory } from "@react-navigation/compat";
 
 const Root = createCompatNavigatorFactory(createStackNavigator)(
   {
+    Auth:{screen:Auth},
     Home: { screen: Home },
     Map: { screen: Map }
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Auth"
   }
 );
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyB1NHYukoiHPVwCyBjF_zYTGI_JinBd-ao",
-//   authDomain: "dev-gerelo.firebaseapp.com",
-//   databaseURL: "https://dev-gerelo.firebaseio.com",
-//   storageBucket: "dev-gerelo.appspot.com"
-// };
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
