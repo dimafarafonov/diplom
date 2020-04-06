@@ -4,23 +4,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withNavigation } from "@react-navigation/compat";
 import * as firebase from "firebase";
-import { changeProps } from "../../FriendActions";
+import { changeProps } from "./actions";
 class Home extends Component {
   constructor(props) {
     super(props);
   }
-//   componentDidMount() {
-//     var db = firebase
-//       .database()
-//       .ref("users")
-//       .on("value", num => {
-//         console.log("num", num);
-//       });
-//   }
+
   setupHighscoreListener = userId => {
     firebase
       .database()
-      .ref("users " + this.props.example.login)
+      .ref("users " + this.props.home.login)
       .on("value", snapshot => {
         const pib = JSON.stringify(snapshot, null, 2);
         Alert.alert(
@@ -32,34 +25,19 @@ class Home extends Component {
         console.log("New high score: " + JSON.stringify(pib));
       });
   };
-  //   setupHighscoreListener = userId => {
-  //     firebase
-  //       .database()
-  //       .ref("users " + this.props.example.login)
-  //       .on("value", snapshot => {
-  //         const pib = snapshot;
-  //         Alert.alert(
-  //             "Останній записанйи користувач логін",
-  //             `${this.props.example.login}`,
-  //             [
-  //               { text: "OK", onPress: () => console.log("OK") }
-  //             ],
-  //             { cancelable: false }
-  //           );
-  //         console.log("New high score: " + JSON.stringify(pib));
-  //       });
-  //   };
+
 
   render() {
-    // console.log(this.props.example)
-    const { navigate } = this.props.navigation;
+    // console.log('this.props.Home',this.props)
+
+    console.log('this.props.auth',this.props.auth)
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center",marginTop:40 }}>
         <Text>Home Screen</Text>
         <Button
           title="Go to map screen"
           onPress={() => {
-            this.props.changeProps(" fromHome"), navigate("Map");
+            this.props.changeProps(" fromHome"), this.props.navigation.navigate("Map");
           }}
         ></Button>
         <Button
@@ -80,9 +58,9 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("state Home", state);
-  const { example } = state;
-  return { example };
+  // console.log("state Home", state);
+  const { home,auth } = state;
+  return { home,auth };
 };
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

@@ -4,7 +4,7 @@ import { StyleSheet, Button, View } from "react-native";
 import * as Location from "expo-location";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
-import { changeProps } from "../../FriendActions";
+import { changeProps } from "../home/actions";
 import { bindActionCreators } from "redux";
 
 class Map extends Component {
@@ -28,10 +28,10 @@ class Map extends Component {
   }
 
   render() {
-    //console.log(this.props.example)
-    const { navigate } = this.props.navigation;
+    // console.log('this.props.Map',this.props)
+
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1,marginTop:40 }}>
         <MapView
           style={StyleSheet.absoluteFillObject}
           region={this.state}
@@ -41,7 +41,7 @@ class Map extends Component {
         <Button
           title="Go to home screen"
           onPress={() => {
-            this.props.changeProps("from Map"), navigate("Home");
+            this.props.changeProps("from Map"), this.props.navigation.navigate("Home");
           }}
           color="orange"
         ></Button>
@@ -51,8 +51,8 @@ class Map extends Component {
 }
 
 const mapStateToProps = state => {
-  const { example } = state;
-  return { example };
+  const { map } = state;
+  return { map };
 };
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
