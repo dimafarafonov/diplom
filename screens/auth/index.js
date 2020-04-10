@@ -3,18 +3,18 @@ import MapView from "react-native-maps";
 import {
   StyleSheet,
   View,
-  AsyncStorage,
+  Text,
   TextInput,
   Alert,
   ActivityIndicator,
   Image,
 } from "react-native";
+import { ValidationForm, ValidationComponent } from "react-native-validation";
 import gerelo from "../../assets/gerelo.png";
-import * as Location from "expo-location";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
 import { Button } from "react-native-elements";
-import { changeProps, setLastWritings } from "../home/actions";
+import { changeProps, setLastWritings, setFetchedUsers } from "../home/actions";
 import { bindActionCreators } from "redux";
 import * as firebase from "firebase";
 import uuid from "uuid-random";
@@ -25,39 +25,74 @@ class Auth extends Component {
       login: "",
       pib: "",
       loading: true,
+      users: [],
+      is_valid:false
     };
+    ValidationComponent.setDefaultErrorMessageStyle({
+      color: "red",
+      fontSize: 10,
+    });
   }
 
   componentDidMount() {
-    console.log("auth mounted");
-
-    this.setState({ loading: false });
-  }
-  componentDidUpdate() {
-    // this.props.auth.have_token
-    //   ? this.props.navigation.navigate("Home")
-    //   : null;
-  }
-
-  storeHighScore = (login, pib) => {
     firebase
       .database()
-      .ref("users " + login)
-      .set({
-        pib: pib,
-        id: uuid(),
+      .ref("users")
+      .on("value", (snapshot) => {
+        const users = snapshot.val();
+        this.props.setFetchedUsers(users);
+        this.setState({ loading: false, users: users });
       });
+  }
+  componentDidUpdate() {
+    // console.log("this.props.Auth", this.props.auth.have_token);
+    this.props.auth.have_token
+      ? this.props.navigation.navigate("Home")
+      : null;
+  }
+
+  checkifUserExist = () => {
+    const { login, users } = this.state;
+    let match = false;
+    Object.keys(users).filter((key) => {
+      if (key == login) {
+        match = true;
+      }
+    });
+    return match;
+  };
+
+  storeHighScore = (login, pib) => {
+    firebase.database().ref(`/users/${login}`).set({
+      pib: pib,
+      id: uuid(),
+    });
   };
   static getDerivedStateFromError() {}
   render() {
-    console.log("this.props.Auth", this.props.auth.have_token);
     const { pib, login } = this.state;
     return !this.props.auth.have_token ? (
       <View style={[styles.container, styles.horizontal]}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     ) : (
-      <View style={{ flex: 1 }}>
+      <ValidationForm
+        ref={(ref) => (this.form = ref)}
+        style={{ flex: 1 }}
+        onSubmit={() => {
+          this.props.setLastWritings(login);
+          this.storeHighScore(login, pib);
+          Alert.alert(
+            "Успішно",
+            "Ви записали нового користувача в базу даних",
+            [{ text: "OK", onPress: () => console.log("OK") }],
+            { cancelable: false }
+          );
+        }}
+        onError={() => {
+          return 0;
+        }}
+      >
         <View
           style={{
             justifyContent: "center",
@@ -71,77 +106,102 @@ class Auth extends Component {
         >
           <Image
             source={gerelo}
-            style={{bottom: 40,width:240,height:65 }}
+            style={{ bottom: 40, width: 240, height: 65 }}
           />
           <View style={styles.input}>
-            <TextInput
-              onChangeText={(value) => {
-                this.setState({ login: value });
+            <ValidationComponent
+              component={
+                <TextInput
+                  onChangeText={(value) => {
+                    this.setState({ login: value });
+                  }}
+                  onTouchStart={() => this.setState({ is_valid: false })}
+                  multiline={true}
+                  numberOfLines={1}
+                  value={this.state.login}
+                  placeholder={"Введіть логін"}
+                  textAlignVertical={"top"}
+                  style={{ padding: 10, paddingBottom: 5 }}
+                  onFocus={() => {
+                    this.setState({ activeDesc: true });
+                  }}
+                  onBlur={() => {
+                    this.setState({ activeDesc: false });
+                  }}
+                />
+              }
+              errorMessageStyle={{
+                color: "red",
+                position: "absolute",
               }}
-              multiline={true}
-              numberOfLines={1}
-              value={this.state.login}
-              placeholder={"Введіть логін"}
-              textAlignVertical={"top"}
-              style={{ padding: 10, paddingBottom: 5 }}
-              onFocus={() => {
-                this.setState({ activeDesc: true });
+              validators={[
+                "required",
+                "minStringLength:8",
+                "maxStringLength:30",
+              ]}
+              errorMessages={[
+                "*Заповнити обов'язково",
+                "мінамільна довжина ніку 8 символів",
+                "максимальна довжина ніку 30 символів",
+              ]}
+            >
+            </ValidationComponent>
+          </View>
+          {!this.state.is_valid ? null : (
+                <Text style={{color:'red',position:'absolute'}}>Ваш логін не унікальний</Text>
+              )}
+          <ValidationComponent
+            style={styles.input}
+            component={
+              <TextInput
+                onChangeText={(value) => {
+                  this.setState({ pib: value });
+                }}
+                multiline={true}
+                numberOfLines={1}
+                value={this.state.pib}
+                placeholder={"Прізвище Імя по батькові"}
+                textAlignVertical={"top"}
+                style={{ padding: 10, paddingBottom: 5 }}
+                onFocus={() => {
+                  this.setState({ activeDesc: true });
+                }}
+                onBlur={() => {
+                  this.setState({ activeDesc: false });
+                }}
+              />
+            }
+            errorMessageStyle={{
+              color: "red",
+              position: "absolute",
+            }}
+            validators={["required", "minStringLength:8", "maxStringLength:30"]}
+            errorMessages={[
+              "*Заповнити обов'язково",
+              "мінамільна довжина імені 8 символів",
+              "максимальна довжина імені 30 символів",
+            ]}
+          ></ValidationComponent>
+          <View>
+            <Button
+              title={"Зареєструватися"}
+              buttonStyle={{
+                top: 25,
+                borderRadius: 20,
+                backgroundColor: "#465880",
+                borderColor: "#ced4da",
+                borderWidth: 2,
               }}
-              onBlur={() => {
-                this.setState({ activeDesc: false });
+              onPress={() => {
+                if (this.checkifUserExist()) {
+                  this.setState({ is_valid: true });
+                  return;
+                } else {
+                  this.form.validate();
+                }
               }}
             />
           </View>
-          <View style={styles.input}>
-            <TextInput
-              onChangeText={(value) => {
-                this.setState({ pib: value });
-              }}
-              multiline={true}
-              numberOfLines={1}
-              value={this.state.pib}
-              placeholder={"Прізвище Імя по батькові"}
-              textAlignVertical={"top"}
-              style={{ padding: 10, paddingBottom: 5 }}
-              onFocus={() => {
-                this.setState({ activeDesc: true });
-              }}
-              onBlur={() => {
-                this.setState({ activeDesc: false });
-              }}
-            />
-          </View>
-          <Button
-            title={"Зареєструватися"}
-            buttonStyle={{
-             top:25,
-             borderRadius:20,
-             backgroundColor: "#465880",
-             borderColor: "#ced4da",
-             borderWidth: 2,
-            }}
-            onPress={() => {
-              this.props.setLastWritings(login);
-              this.storeHighScore(login, pib);
-              Alert.alert(
-                "Успішно",
-                "Ви записали нового користувача в базу даних",
-                [
-                  {
-                    text: "Ask me later",
-                    onPress: () => console.log("Ask me later pressed"),
-                  },
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => console.log("OK") },
-                ],
-                { cancelable: false }
-              );
-            }}
-          />
         </View>
         <View
           style={{
@@ -162,15 +222,25 @@ class Auth extends Component {
               this.props.navigation.navigate("Home");
             }}
           />
+          {/* <Button
+            title={"checkifExists"}
+            buttonStyle={{
+              width: "90%",
+              left: 20,
+            }}
+            onPress={() => {
+              this.checkifUserExist();
+            }}
+          /> */}
         </View>
-      </View>
+      </ValidationForm>
     );
   }
 }
 
 const styles = StyleSheet.create({
   input: {
-    marginBottom: 10,
+    marginBottom: 20,
     borderRadius: 20,
     paddingLeft: 10,
     paddingRight: 10,
@@ -191,15 +261,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  // console.log("state Auth", state);
-  const { auth } = state;
-  return { auth };
+  const { auth, home } = state;
+  return { auth, home };
 };
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       changeProps,
       setLastWritings,
+      setFetchedUsers,
     },
     dispatch
   );

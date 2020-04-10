@@ -10,11 +10,11 @@ class Home extends Component {
     super(props);
   }
 
-  setupHighscoreListener = userId => {
+  setupHighscoreListener = (userId) => {
     firebase
       .database()
       .ref("users " + this.props.home.login)
-      .on("value", snapshot => {
+      .on("value", (snapshot) => {
         const pib = JSON.stringify(snapshot, null, 2);
         Alert.alert(
           "Останній записанйи користувач логін",
@@ -26,18 +26,24 @@ class Home extends Component {
       });
   };
 
-
   render() {
-    // console.log('this.props.Home',this.props)
-
-    console.log('this.props.auth',this.props.auth)
+    // console.log("this.props.Home", this.props.home.users);
+    // console.log("this.props.auth", this.props.auth);
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center",marginTop:40 }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 40,
+        }}
+      >
         <Text>Home Screen</Text>
         <Button
           title="Go to map screen"
           onPress={() => {
-            this.props.changeProps(" fromHome"), this.props.navigation.navigate("Map");
+            this.props.changeProps(" fromHome"),
+              this.props.navigation.navigate("Map");
           }}
         ></Button>
         <Button
@@ -57,15 +63,15 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   // console.log("state Home", state);
-  const { home,auth } = state;
-  return { home,auth };
+  const { home, auth } = state;
+  return { home, auth };
 };
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      changeProps
+      changeProps,
     },
     dispatch
   );

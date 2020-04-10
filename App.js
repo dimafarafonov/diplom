@@ -14,7 +14,7 @@ import { Provider } from "react-redux";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer, StackActionss } from "@react-navigation/native";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createCompatNavigatorFactory } from "@react-navigation/compat";
 
 const Root = createCompatNavigatorFactory(createStackNavigator)(

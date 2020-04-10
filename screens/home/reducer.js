@@ -2,7 +2,8 @@
 const default_state = {
     current: "current",
     possible: "possible",
-    login: "default"
+    login: "default",
+    users:[]
   };
 
   export default function(state = default_state, action){
@@ -14,6 +15,10 @@ const default_state = {
       case "SET_LAST_ELEMENT": {
         const login = action.login;
         return Object.assign({}, state, { login: login });
+      }
+      case "SET_FETCHED_USERS": {
+        const users = action.users;
+        return Object.assign({}, state, { users: users });
       }
 
       default:
