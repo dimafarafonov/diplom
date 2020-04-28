@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, Button, View } from "react-native";
+import { StyleSheet, Button, View, Image } from "react-native";
 import * as Location from "expo-location";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {setCoords} from "../../actions";
+import { setCoords } from "../../actions";
 class MiniMap extends Component {
   constructor(props) {
     super(props);
@@ -27,24 +27,26 @@ class MiniMap extends Component {
   }
 
   render() {
-    let array = {}
+    let array = {};
     return (
-      <View style={{ position: "relative", height: "35%" }}>
+      <View style={{height: "40%",width:'100%'}}>
         <MapView
           style={{ height: "100%", width: "100%" }}
           region={this.state || this.props.location_create.coords}
-          showsUserLocation={true}
+          // showsUserLocation={true}
           onRegionChangeComplete={(region) => {
             array = {
               longitude: region.longitude,
               latitude: region.latitude,
-            }
-            this.props.setCoords(array)
-            this.setState(array)
+            };
+            this.props.setCoords(array);
+            this.setState(array);
           }}
         >
-
         </MapView>
+        <View style={{ position:'absolute',left:'47%',top:'38%' }}>
+            <Image  style={{position:'absolute'}} source={require('../../../../assets/marker.png')} />
+          </View>
       </View>
     );
   }
@@ -54,11 +56,13 @@ const mapStateToProps = (state) => {
   const { location_create } = state;
   return { location_create };
 };
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      setCoords
+      setCoords,
     },
     dispatch
   );
-export default withNavigation(connect(mapStateToProps,mapDispatchToProps)(MiniMap));
+export default withNavigation(
+  connect(mapStateToProps, mapDispatchToProps)(MiniMap)
+);
