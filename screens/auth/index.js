@@ -26,7 +26,7 @@ class Auth extends Component {
       pib: "",
       loading: true,
       users: [],
-      is_valid:false
+      is_valid: false,
     };
     ValidationComponent.setDefaultErrorMessageStyle({
       color: "red",
@@ -45,10 +45,8 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-    // console.log("this.props.Auth", this.props.auth.have_token);
-    this.props.auth.have_token
-      ? this.props.navigation.navigate("Home")
-      : null;
+     console.log("this.props.Auth", this.props.auth.have_token);
+     this.props.auth.have_token ? this.props.navigation.navigate("Home") : this.props.navigation.navigate('Auth');
   }
 
   checkifUserExist = () => {
@@ -70,6 +68,7 @@ class Auth extends Component {
   };
   static getDerivedStateFromError() {}
   render() {
+
     const { pib, login } = this.state;
     return !this.props.auth.have_token ? (
       <View style={[styles.container, styles.horizontal]}>
@@ -77,7 +76,9 @@ class Auth extends Component {
       </View>
     ) : (
       <ValidationForm
-        ref={(ref) => (this.form = ref)}
+        ref={(ref) => {
+          this.form = ref;
+        }}
         style={{ flex: 1 }}
         onSubmit={() => {
           this.props.setLastWritings(login);
@@ -144,12 +145,13 @@ class Auth extends Component {
                 "мінамільна довжина ніку 8 символів",
                 "максимальна довжина ніку 30 символів",
               ]}
-            >
-            </ValidationComponent>
+            ></ValidationComponent>
           </View>
           {!this.state.is_valid ? null : (
-                <Text style={{color:'red',position:'absolute'}}>Ваш логін не унікальний</Text>
-              )}
+            <Text style={{ color: "red", position: "absolute" }}>
+              Ваш логін не унікальний
+            </Text>
+          )}
           <ValidationComponent
             style={styles.input}
             component={

@@ -15,20 +15,13 @@ export function _storeData() {
     // Error saving data
   }
 }
-
-// retrieveData = () => {
-//   try {
-//     const value = AsyncStorage.getItem("UNIQUE");
-//     if (value !== null) {
-//       console.log("We have data", value);
-//       return value;
-//     } else {
-//       return false;
-//     }
-//   } catch (error) {}
-// };
-
 export const _retrieveData = (value) => ({
   type: "RETRIEVE_DATA",
   payload: value,
+});
+
+
+export const _getLocations = (value) => ({
+  type: "GET_LOCATIONS",
+  locations: value,
 });

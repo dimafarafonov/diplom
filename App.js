@@ -3,13 +3,14 @@ import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import Home from "./screens/home";
 import Map from "./screens/map";
 import Auth from "./screens/auth";
+import LocationCreate from "./screens/location_create";
 import firebaseConfig from "./config/firebase";
 import reducer from "./reducers/index.js";
 import * as Permissions from "expo-permissions";
 import * as firebase from "firebase";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { _storeData, _retrieveData } from "./reducers/actions";
+import { _storeData, _retrieveData, _removeData,_getLocations } from "./reducers/actions";
 import { Provider } from "react-redux";
 
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -22,6 +23,7 @@ const Root = createCompatNavigatorFactory(createStackNavigator)(
     Auth: Auth,
     Home: Home,
     Map: Map,
+    LocationCreate: LocationCreate,
   },
   {
     initialRouteName: "Auth",
@@ -46,19 +48,28 @@ class App extends React.Component {
   //     // Error saving data
   //   }
   // };
-
+  getLocations = () => {
+    firebase
+      .database()
+      .ref("locations")
+      .on("value", (snapshot) => {
+        const locations = snapshot.val();
+        store.dispatch(_getLocations(locations))
+      });
+  };
   retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("UNIQUE");
       if (value !== null) {
         store.dispatch(_retrieveData(value));
       } else {
-        store.dispatch(_retrieveData(false));
+        store.dispatch(_storeData(value));
       }
     } catch (error) {}
   };
 
   componentDidMount() {
+    this.getLocations()
     this.retrieveData();
     this._getLocationAsync();
   }

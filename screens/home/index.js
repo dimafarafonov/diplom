@@ -27,8 +27,7 @@ class Home extends Component {
   };
 
   render() {
-    // console.log("this.props.Home", this.props.home.users);
-    // console.log("this.props.auth", this.props.auth);
+
     return (
       <View
         style={{
@@ -42,7 +41,7 @@ class Home extends Component {
         <Button
           title="Go to map screen"
           onPress={() => {
-            this.props.changeProps(" fromHome"),
+            // this.props.changeProps(" fromHome"),
               this.props.navigation.navigate("Map");
           }}
         ></Button>
@@ -56,6 +55,12 @@ class Home extends Component {
           title="Виведіть останні дані з бази "
           onPress={() => {
             this.setupHighscoreListener();
+          }}
+        ></Button>
+        <Button
+          title="Створити локацію"
+          onPress={() => {
+            this.props.navigation.navigate("LocationCreate")
           }}
         ></Button>
       </View>
