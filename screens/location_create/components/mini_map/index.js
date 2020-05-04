@@ -33,7 +33,6 @@ class MiniMap extends Component {
         <MapView
           style={{ height: "100%", width: "100%" }}
           region={this.state || this.props.location_create.coords}
-          // showsUserLocation={true}
           onRegionChangeComplete={(region) => {
             array = {
               longitude: region.longitude,

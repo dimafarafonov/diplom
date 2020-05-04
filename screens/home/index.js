@@ -37,7 +37,7 @@ class Home extends Component {
           marginTop: 40,
         }}
       >
-        <Text>Home Screen</Text>
+
         <Button
           title="Go to map screen"
           onPress={() => {
@@ -61,6 +61,12 @@ class Home extends Component {
           title="Створити локацію"
           onPress={() => {
             this.props.navigation.navigate("LocationCreate")
+          }}
+        ></Button>
+        <Button
+          title="Мої локації"
+          onPress={() => {
+            this.props.navigation.navigate("LocationList")
           }}
         ></Button>
       </View>

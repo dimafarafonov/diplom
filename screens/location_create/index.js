@@ -1,20 +1,43 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TextInput,Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Alert,
+  AsyncStorage,
+} from "react-native";
 import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
 import { ValidationForm, ValidationComponent } from "react-native-validation";
 import { Button } from "react-native-elements";
 import MiniMap from "./components/mini_map";
 import * as firebase from "firebase";
+import uuid from "uuid-random";
 class LocationCreate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title:'',
-      description:''
+      title: "",
+      description: "",
+      users: this.props.home.users,
+      token: "",
+      user_id: "",
     };
   }
+  async componentDidMount() {
+    this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
+    const { users } = this.state;
+    if (users != null) {
+      Object.entries(users).filter((key, index) => {
+        if (key[1].token == this.state.token)
+          this.setState({ user_id: key[1].id });
+      });
+    }
 
+    // console.log("this.props.home.users", this.props.home.users);
+    console.log("Unique", this.state.token);
+  }
   render() {
     return (
       <ValidationForm
@@ -30,12 +53,17 @@ class LocationCreate extends React.Component {
               {
                 text: "OK",
                 onPress: () => {
-                  console.log('succes added fields in database')
-                  firebase.database().ref(`/locations/${this.state.title}`).set({
-                    coords: this.props.location_create.coords,
-                    title:this.state.title,
-                    description:this.state.description
-                  });
+                  console.log("succes added fields in database");
+                  firebase
+                    .database()
+                    .ref(`/locations/${this.state.title}`)
+                    .set({
+                      coords: this.props.location_create.coords,
+                      title: this.state.title,
+                      description: this.state.description,
+                      location_id: uuid(),
+                      user_id: this.state.user_id,
+                    });
                 },
               },
             ],

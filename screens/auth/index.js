@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { ValidationForm, ValidationComponent } from "react-native-validation";
 import gerelo from "../../assets/gerelo.png";
+import { _storeData } from "../../reducers/actions";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
 import { Button } from "react-native-elements";
@@ -45,31 +46,38 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-     console.log("this.props.Auth", this.props.auth.have_token);
-     this.props.auth.have_token ? this.props.navigation.navigate("Home") : this.props.navigation.navigate('Auth');
+    console.log("this.props.Auth", this.props.auth.have_token);
+    this.props.auth.have_token
+      ? this.props.navigation.navigate("Home")
+      : this.props.navigation.navigate("Auth");
   }
 
   checkifUserExist = () => {
     const { login, users } = this.state;
     let match = false;
-    Object.keys(users).filter((key) => {
-      if (key == login) {
-        match = true;
-      }
-    });
+    if (users != null) {
+      Object.keys(users).filter((key) => {
+        if (key == login) {
+          match = true;
+        }
+      });
+    }
     return match;
   };
 
-  storeHighScore = (login, pib) => {
-    firebase.database().ref(`/users/${login}`).set({
+  storeHighScore = async (login, pib, token) => {
+  await  firebase.database().ref(`/users/${login}`).set({
       pib: pib,
       id: uuid(),
+      token: token,
     });
+  await  this.props._storeData(token);
   };
   static getDerivedStateFromError() {}
   render() {
-
+    // console.log('this.props._storeData(token)',this.props._storeData();
     const { pib, login } = this.state;
+    //spinner for no token   !this.props.auth.have_token
     return !this.props.auth.have_token ? (
       <View style={[styles.container, styles.horizontal]}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -82,7 +90,7 @@ class Auth extends Component {
         style={{ flex: 1 }}
         onSubmit={() => {
           this.props.setLastWritings(login);
-          this.storeHighScore(login, pib);
+          this.storeHighScore(login, pib, uuid());
           Alert.alert(
             "Успішно",
             "Ви записали нового користувача в базу даних",
@@ -272,6 +280,7 @@ const mapDispatchToProps = (dispatch) =>
       changeProps,
       setLastWritings,
       setFetchedUsers,
+      _storeData,
     },
     dispatch
   );

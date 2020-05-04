@@ -8,9 +8,9 @@ export function _removeData() {
   }
 }
 
-export function _storeData() {
+export function _storeData(token) {
   try {
-    AsyncStorage.setItem("UNIQUE", "dev_gerelo");
+    AsyncStorage.setItem("UNIQUE", token);
   } catch (error) {
     // Error saving data
   }

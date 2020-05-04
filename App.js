@@ -4,13 +4,19 @@ import Home from "./screens/home";
 import Map from "./screens/map";
 import Auth from "./screens/auth";
 import LocationCreate from "./screens/location_create";
+import LocationList from "./screens/location_list";
 import firebaseConfig from "./config/firebase";
 import reducer from "./reducers/index.js";
 import * as Permissions from "expo-permissions";
 import * as firebase from "firebase";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { _storeData, _retrieveData, _removeData,_getLocations } from "./reducers/actions";
+import {
+  _storeData,
+  _retrieveData,
+  _removeData,
+  _getLocations,
+} from "./reducers/actions";
 import { Provider } from "react-redux";
 
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -24,6 +30,7 @@ const Root = createCompatNavigatorFactory(createStackNavigator)(
     Home: Home,
     Map: Map,
     LocationCreate: LocationCreate,
+    LocationList: LocationList,
   },
   {
     initialRouteName: "Auth",
@@ -54,22 +61,24 @@ class App extends React.Component {
       .ref("locations")
       .on("value", (snapshot) => {
         const locations = snapshot.val();
-        store.dispatch(_getLocations(locations))
+        store.dispatch(_getLocations(locations));
       });
   };
   retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("UNIQUE");
+      console.log('Unique',value)
+
       if (value !== null) {
-        store.dispatch(_retrieveData(value));
+       store.dispatch(_retrieveData(value));
       } else {
-        store.dispatch(_storeData(value));
+        //  store.dispatch(_storeData(value));
       }
     } catch (error) {}
   };
 
   componentDidMount() {
-    this.getLocations()
+    this.getLocations();
     this.retrieveData();
     this._getLocationAsync();
   }
