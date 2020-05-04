@@ -5,6 +5,7 @@ import Map from "./screens/map";
 import Auth from "./screens/auth";
 import LocationCreate from "./screens/location_create";
 import LocationList from "./screens/location_list";
+import LocationProfile from "./screens/location_profile"
 import firebaseConfig from "./config/firebase";
 import reducer from "./reducers/index.js";
 import * as Permissions from "expo-permissions";
@@ -31,6 +32,7 @@ const Root = createCompatNavigatorFactory(createStackNavigator)(
     Map: Map,
     LocationCreate: LocationCreate,
     LocationList: LocationList,
+    LocationProfile:LocationProfile
   },
   {
     initialRouteName: "Auth",

@@ -46,12 +46,16 @@ class LocationList extends React.Component {
               key={index}
               style={{
                 height: 100,
-                width:'95%',
+                width: "95%",
                 backgroundColor: "lightgrey",
                 left: 5,
-
                 marginBottom: 20,
               }}
+              onPress={() =>
+                this.props.navigation.navigate("LocationProfile", {
+                  id: marker[1].location_id,
+                })
+              }
             >
               <Text> Назва - {marker[1].title}</Text>
               <Text> Опис - {marker[1].description}</Text>

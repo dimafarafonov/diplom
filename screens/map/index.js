@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {  Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import MapView from "react-native-maps";
 import { StyleSheet, Button, View } from "react-native";
 import * as Location from "expo-location";
@@ -16,11 +16,14 @@ class Map extends Component {
       longitude: -122.4324,
       latitudeDelta: 0.1,
       longitudeDelta: 0.1,
-      locations: Object.entries(this.props.auth.locations),
+      locations: {},
     };
   }
 
   async componentDidMount() {
+    if (this.props.auth.locations != {}) {
+      this.setState({ locations: Object.entries(this.props.auth.locations) });
+    }
     let location = await Location.getCurrentPositionAsync({});
     // console.log("app.js location", location);
     this.setState({
@@ -39,7 +42,7 @@ class Map extends Component {
           region={this.state}
           showsUserLocation={true}
         >
-          {locations.map((marker,index) => (
+          {locations.map((marker, index) => (
             // console.log("marker", marker)
             <Marker
               key={index}
