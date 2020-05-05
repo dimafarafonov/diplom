@@ -6,8 +6,14 @@ import {
   TextInput,
   Alert,
   AsyncStorage,
+  Image,
+  ScrollView,
+  Dimensions,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
 import { withNavigation } from "@react-navigation/compat";
 import { ValidationForm, ValidationComponent } from "react-native-validation";
 import { Button } from "react-native-elements";
@@ -23,9 +29,11 @@ class LocationCreate extends React.Component {
       users: this.props.home.users,
       token: "",
       user_id: "",
+      image: null,
     };
   }
   async componentDidMount() {
+    this.getPermissionAsync();
     this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
     const { users } = this.state;
     if (users != null) {
@@ -34,11 +42,41 @@ class LocationCreate extends React.Component {
           this.setState({ user_id: key[1].id });
       });
     }
-
-    // console.log("this.props.home.users", this.props.home.users);
-    console.log("Unique", this.state.token);
   }
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
+  uploadImage = () => {
+    firebase
+      .storage()
+      .ref()
+      .child("images/" + this.state.image);
+  };
+  _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        this.setState({ image: result.uri });
+      }
+
+      console.log("result", result);
+    } catch (E) {
+      console.log("E", E);
+    }
+  };
   render() {
+    let { image } = this.state;
+    console.log("image", image);
     return (
       <ValidationForm
         ref={(ref) => {
@@ -48,7 +86,7 @@ class LocationCreate extends React.Component {
         onSubmit={() => {
           Alert.alert(
             "Успішно",
-            "Ви записали нового користувача в базу даних",
+            "Створена нова локація",
             [
               {
                 text: "OK",
@@ -85,7 +123,7 @@ class LocationCreate extends React.Component {
             flex: 1,
           }}
         >
-          <Text style={{ color: "white", fontSize: 20, bottom: 50 }}>
+          <Text style={{ color: "white", fontSize: 20, bottom: 35 }}>
             Створення локації
           </Text>
           <View style={styles.input}>
@@ -167,6 +205,22 @@ class LocationCreate extends React.Component {
               "максимальна довжина 100 символів",
             ]}
           ></ValidationComponent>
+          <Button
+            title="Виберіть фото для локації"
+            onPress={this._pickImage}
+            buttonStyle={{
+              borderRadius: 30,
+              backgroundColor: "#465880",
+              borderColor: "#ced4da",
+              borderWidth: 2,
+            }}
+          />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 50, height: 50, top: 20 }}
+            />
+          )}
           <View>
             <Button
               title={"Створити"}
@@ -182,16 +236,23 @@ class LocationCreate extends React.Component {
               }}
             />
           </View>
+          <View>
+            <Button
+              title={"Записати фотку"}
+              buttonStyle={{
+                top: 25,
+                borderRadius: 30,
+                backgroundColor: "#465880",
+                borderColor: "#ced4da",
+                borderWidth: 2,
+              }}
+              onPress={() => {
+                this.uploadImage();
+              }}
+            />
+          </View>
         </View>
-        <View
-          style={{
-            // borderColor: "orange",
-            // borderWidth: 2,
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-          }}
-        ></View>
+
         <MiniMap />
       </ValidationForm>
     );

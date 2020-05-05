@@ -5,11 +5,12 @@ import Map from "./screens/map";
 import Auth from "./screens/auth";
 import LocationCreate from "./screens/location_create";
 import LocationList from "./screens/location_list";
-import LocationProfile from "./screens/location_profile"
+import LocationProfile from "./screens/location_profile";
 import firebaseConfig from "./config/firebase";
 import reducer from "./reducers/index.js";
 import * as Permissions from "expo-permissions";
 import * as firebase from "firebase";
+import * as Location from "expo-location";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import {
@@ -17,7 +18,7 @@ import {
   _retrieveData,
   _removeData,
   _getLocations,
-  _getCurrentPosition
+  _getCurrentPosition,
 } from "./reducers/actions";
 import { Provider } from "react-redux";
 
@@ -33,7 +34,7 @@ const Root = createCompatNavigatorFactory(createStackNavigator)(
     Map: Map,
     LocationCreate: LocationCreate,
     LocationList: LocationList,
-    LocationProfile:LocationProfile
+    LocationProfile: LocationProfile,
   },
   {
     initialRouteName: "Auth",
@@ -58,11 +59,11 @@ class App extends React.Component {
   //     // Error saving data
   //   }
   // };
-  getCurrentPosition = async ()=>{
+  getCurrentPosition = async () => {
     let location = await Location.getCurrentPositionAsync({});
     // console.log("app.js location", location);
-    store.dispatch(_getCurrentPosition(location))
-  }
+    store.dispatch(_getCurrentPosition(location));
+  };
   getLocations = () => {
     firebase
       .database()
@@ -75,20 +76,21 @@ class App extends React.Component {
   retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("UNIQUE");
-      console.log('Unique',value)
+      console.log("Unique", value);
 
       if (value !== null) {
-       store.dispatch(_retrieveData(value));
+        store.dispatch(_retrieveData(value));
       } else {
         //  store.dispatch(_storeData(value));
       }
     } catch (error) {}
   };
 
-  componentDidMount() {
-    this.getLocations();
-    this.retrieveData();
-    this._getLocationAsync();
+  async componentDidMount() {
+    await this.getLocations();
+    await this.retrieveData();
+    await this._getLocationAsync();
+    await this.getCurrentPosition();
   }
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);

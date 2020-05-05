@@ -29,7 +29,7 @@ class MiniMap extends Component {
   render() {
     let array = {};
     return (
-      <View style={{height: "40%",width:'100%'}}>
+      <View style={{height: 100,width:'100%'}}>
         <MapView
           style={{ height: "100%", width: "100%" }}
           region={this.state || this.props.location_create.coords}

@@ -14,10 +14,10 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.5,
-      longitudeDelta: 0.5,
+      latitude: this.props.auth.position.coords.latitude,
+      longitude: this.props.auth.position.coords.longitude,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
       locations: [],
       radius: 0,
     };
@@ -25,8 +25,8 @@ class Map extends Component {
   deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
-  searchByRadius = (radius) => {
-    this.setState({ radius });
+  searchByRadius = (radius, latitudeDelta, longitudeDelta) => {
+    this.setState({ radius, latitudeDelta, longitudeDelta });
   };
   getDistance(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
@@ -50,7 +50,7 @@ class Map extends Component {
       });
     }
     let location = await Location.getCurrentPositionAsync({});
-    console.log("app.js location", location);
+    // console.log("app.js location", location);
     this.setState({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
@@ -59,7 +59,7 @@ class Map extends Component {
 
   render() {
     const { locations, latitude, longitude } = this.state;
-
+    // console.log('coords',this.props.auth.position.coords)
     return (
       <View style={{ flex: 1 }}>
         <MapView
