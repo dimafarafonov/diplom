@@ -20,7 +20,10 @@ export const _retrieveData = (value) => ({
   payload: value,
 });
 
-
+export const _getCurrentPosition = (position) => ({
+  type: "CURRENT_POS",
+  position: position,
+});
 export const _getLocations = (value) => ({
   type: "GET_LOCATIONS",
   locations: value,

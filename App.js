@@ -17,6 +17,7 @@ import {
   _retrieveData,
   _removeData,
   _getLocations,
+  _getCurrentPosition
 } from "./reducers/actions";
 import { Provider } from "react-redux";
 
@@ -57,6 +58,11 @@ class App extends React.Component {
   //     // Error saving data
   //   }
   // };
+  getCurrentPosition = async ()=>{
+    let location = await Location.getCurrentPositionAsync({});
+    // console.log("app.js location", location);
+    store.dispatch(_getCurrentPosition(location))
+  }
   getLocations = () => {
     firebase
       .database()

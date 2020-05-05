@@ -1,6 +1,7 @@
 const default_state = {
   have_token: false,
-  locations:{}
+  locations:{},
+  position:{}
 };
 
 export default function (state = default_state, action) {
@@ -14,6 +15,10 @@ export default function (state = default_state, action) {
     //console.log('action.locations',action.locations)
     const locations = action.locations;
     return Object.assign({}, state, { locations: locations });
+  }
+  case "CURRENT_POS": {
+    const position = action.position;
+    return Object.assign({}, state, { position: position });
   }
     default:
       return state;

@@ -21,8 +21,8 @@ class LocationProfile extends React.Component {
   componentDidMount() {}
   render() {
     const { locations } = this.state;
-    let title = "empty";
-    let description = "empty";
+    let title = "";
+    let description = "";
     locations.map((marker, index) => {
       marker[1].location_id == this.state.location_id
         ? ((title = marker[1].title), (description = marker[1].description))
