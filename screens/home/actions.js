@@ -10,3 +10,7 @@ export const changeProps = prop => ({
     type: "SET_FETCHED_USERS",
     users: users
   });
+  export const getUserName = username => ({
+    type: "GET_USERNAME",
+    username: username
+  });

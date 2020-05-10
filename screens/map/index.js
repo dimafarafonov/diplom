@@ -50,7 +50,7 @@ class Map extends Component {
       });
     }
     let location = await Location.getCurrentPositionAsync({});
-    // console.log("app.js location", location);
+
     this.setState({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
@@ -59,7 +59,7 @@ class Map extends Component {
 
   render() {
     const { locations, latitude, longitude } = this.state;
-    // console.log('coords',this.props.auth.position.coords)
+
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -78,6 +78,14 @@ class Map extends Component {
               <Marker
                 style={{ zIndex: 999, position: "absolute" }}
                 key={index}
+                onPress={() => {
+                  this.props.navigation.navigate("LocationProfile", {
+                    coordinate: marker[1].coords,
+                    title:marker[1].title,
+                    description:marker[1].description,
+                    location_id:marker[1].location_id
+                  });
+                }}
                 coordinate={marker[1].coords}
                 title={marker[1].title}
                 description={marker[1].description}

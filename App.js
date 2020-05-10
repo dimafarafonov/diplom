@@ -19,6 +19,7 @@ import {
   _removeData,
   _getLocations,
   _getCurrentPosition,
+  _getComments
 } from "./reducers/actions";
 import { Provider } from "react-redux";
 
@@ -73,6 +74,16 @@ class App extends React.Component {
         store.dispatch(_getLocations(locations));
       });
   };
+
+  getComments = () => {
+    firebase
+      .database()
+      .ref("comments")
+      .on("value", (snapshot) => {
+        const comments = snapshot.val();
+        store.dispatch(_getComments(comments));
+      });
+  };
   retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("UNIQUE");
@@ -87,6 +98,7 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
+    await this.getComments()
     await this.getLocations();
     await this.retrieveData();
     await this._getLocationAsync();

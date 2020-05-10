@@ -15,7 +15,7 @@ import { _storeData } from "../../reducers/actions";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
 import { Button } from "react-native-elements";
-import { changeProps, setLastWritings, setFetchedUsers } from "../home/actions";
+import { changeProps, setLastWritings, setFetchedUsers,getUserName } from "../home/actions";
 import { bindActionCreators } from "redux";
 import * as firebase from "firebase";
 import uuid from "uuid-random";
@@ -46,10 +46,10 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-    console.log("this.props.Auth", this.props.auth.have_token);
-    this.props.auth.have_token
-      ? this.props.navigation.navigate("Home")
-      : this.props.navigation.navigate("Auth");
+    // console.log("this.props.Auth", this.props.auth.have_token);
+    // this.props.auth.have_token
+    //   ? this.props.navigation.navigate("Home")
+    //   : this.props.navigation.navigate("Auth");
   }
 
   checkifUserExist = () => {

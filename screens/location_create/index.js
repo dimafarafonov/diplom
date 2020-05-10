@@ -28,20 +28,22 @@ class LocationCreate extends React.Component {
       description: "",
       users: this.props.home.users,
       token: "",
-      user_id: "",
+      user_id: this.props.home.username,
       image: null,
     };
   }
   async componentDidMount() {
+    console.log('this.state.id',this.state.user_id)
     this.getPermissionAsync();
-    this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
-    const { users } = this.state;
-    if (users != null) {
-      Object.entries(users).filter((key, index) => {
-        if (key[1].token == this.state.token)
-          this.setState({ user_id: key[1].id });
-      });
-    }
+    // this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
+    // const { users } = this.state;
+    // if (users != null) {
+    //   Object.entries(users).filter((key, index) => {
+    //     if (key[1].token == this.state.token)
+    //       this.setState({ user_id: key[1].id });
+
+    //   });
+    // }
   }
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
@@ -76,7 +78,7 @@ class LocationCreate extends React.Component {
   };
   render() {
     let { image } = this.state;
-    console.log("image", image);
+    // console.log("image", image);
     return (
       <ValidationForm
         ref={(ref) => {
@@ -205,7 +207,7 @@ class LocationCreate extends React.Component {
               "максимальна довжина 100 символів",
             ]}
           ></ValidationComponent>
-          <Button
+          {/* <Button
             title="Виберіть фото для локації"
             onPress={this._pickImage}
             buttonStyle={{
@@ -220,7 +222,7 @@ class LocationCreate extends React.Component {
               source={{ uri: image }}
               style={{ width: 50, height: 50, top: 20 }}
             />
-          )}
+          )} */}
           <View>
             <Button
               title={"Створити"}
@@ -237,7 +239,7 @@ class LocationCreate extends React.Component {
             />
           </View>
           <View>
-            <Button
+            {/* <Button
               title={"Записати фотку"}
               buttonStyle={{
                 top: 25,
@@ -249,7 +251,7 @@ class LocationCreate extends React.Component {
               onPress={() => {
                 this.uploadImage();
               }}
-            />
+            /> */}
           </View>
         </View>
 

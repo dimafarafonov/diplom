@@ -28,3 +28,7 @@ export const _getLocations = (value) => ({
   type: "GET_LOCATIONS",
   locations: value,
 });
+export const _getComments = (comments) => ({
+  type: "GET_COMMENTS",
+  comments: comments,
+});

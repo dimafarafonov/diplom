@@ -1,13 +1,16 @@
 import React, { Component } from "react";
-import { Text, View, Button, Alert } from "react-native";
+import { Text, View, Button, Alert, AsyncStorage } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withNavigation } from "@react-navigation/compat";
 import * as firebase from "firebase";
-import { changeProps } from "./actions";
+import { changeProps, getUserName } from "./actions";
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      users: this.props.home.users,
+    };
   }
 
   setupHighscoreListener = (userId) => {
@@ -26,8 +29,20 @@ class Home extends Component {
       });
   };
 
-  render() {
+  async componentDidMount() {
+    this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
+    const { users } = this.state;
+    if (users != null) {
+      Object.entries(users).filter((key, index) => {
+        if (key[1].token == this.state.token) {
+          this.setState({ user_id: key[1].id });
+          this.props.getUserName(key[1].id);
+        }
+      });
+    }
+  }
 
+  render() {
     return (
       <View
         style={{
@@ -37,12 +52,11 @@ class Home extends Component {
           marginTop: 40,
         }}
       >
-
         <Button
           title="Go to map screen"
           onPress={() => {
             // this.props.changeProps(" fromHome"),
-              this.props.navigation.navigate("Map");
+            this.props.navigation.navigate("Map");
           }}
         ></Button>
         <Button
@@ -60,13 +74,13 @@ class Home extends Component {
         <Button
           title="Створити локацію"
           onPress={() => {
-            this.props.navigation.navigate("LocationCreate")
+            this.props.navigation.navigate("LocationCreate");
           }}
         ></Button>
         <Button
           title="Мої локації"
           onPress={() => {
-            this.props.navigation.navigate("LocationList")
+            this.props.navigation.navigate("LocationList");
           }}
         ></Button>
       </View>
@@ -83,6 +97,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       changeProps,
+      getUserName,
     },
     dispatch
   );

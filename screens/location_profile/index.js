@@ -8,6 +8,7 @@ import {
   AsyncStorage,
   TouchableOpacity,
 } from "react-native";
+import Comments from "./components/comments";
 import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
 class LocationProfile extends React.Component {
@@ -15,7 +16,7 @@ class LocationProfile extends React.Component {
     super(props);
     this.state = {
       locations: Object.entries(this.props.auth.locations),
-      location_id: this.props.navigation.state.params.id,
+      location_id: this.props.navigation.state.params.location_id,
     };
   }
   componentDidMount() {}
@@ -23,13 +24,13 @@ class LocationProfile extends React.Component {
     const { locations } = this.state;
     let title = "";
     let description = "";
+
     locations.map((marker, index) => {
       marker[1].location_id == this.state.location_id
         ? ((title = marker[1].title), (description = marker[1].description))
         : null;
     });
-    console.log("title", title);
-    console.log("description", description);
+     console.log("this.state.id", this.state.location_id);
     return (
       <View
         style={{
@@ -39,9 +40,16 @@ class LocationProfile extends React.Component {
           fontSize: 40,
         }}
       >
-        <Text> Назва - {title}</Text>
-        <Text> Опис - {description}</Text>
+        <Text>
+          {" "}
+          Назва - {title || this.props.navigation.state.params.title}
+        </Text>
+        <Text>
+          {" "}
+          Опис - {description || this.props.navigation.state.params.description}
+        </Text>
         <Text> Фотка - </Text>
+        <Comments location_id={this.state.location_id} />
       </View>
     );
   }

@@ -16,6 +16,7 @@ class LocationList extends React.Component {
     this.state = {
       locations: Object.entries(this.props.auth.locations),
       users: this.props.home.users,
+      user_id: this.props.home.username,
     };
   }
   async componentDidMount() {
@@ -29,6 +30,7 @@ class LocationList extends React.Component {
     }
   }
   render() {
+    // console.log("this.satte.username", this.state.username);
     const { locations } = this.state;
     return (
       <View
@@ -53,7 +55,7 @@ class LocationList extends React.Component {
               }}
               onPress={() =>
                 this.props.navigation.navigate("LocationProfile", {
-                  id: marker[1].location_id,
+                  location_id: marker[1].location_id,
                 })
               }
             >
