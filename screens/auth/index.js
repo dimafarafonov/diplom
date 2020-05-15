@@ -53,9 +53,9 @@ class Auth extends Component {
   }
   componentDidUpdate() {
     console.log("this.props.Auth", this.props.auth.have_token);
-    this.props.auth.have_token
-      ? this.props.navigation.navigate("Home")
-      : this.props.navigation.navigate("Auth");
+    // this.props.auth.have_token
+    //   ? this.props.navigation.navigate("Home")
+    //   : this.props.navigation.navigate("Auth");
   }
 
   checkifUserExist = () => {
@@ -98,6 +98,7 @@ class Auth extends Component {
       id: uuid(),
       token: token,
     });
+    this.props.navigation.navigate("Home");
     this.props._storeData(token);
   };
   static getDerivedStateFromError() {}
@@ -120,7 +121,7 @@ class Auth extends Component {
           this.createNewUser(login, pib, uuid());
           Alert.alert(
             "Успішно",
-            "Ви записали нового користувача в базу даних",
+            "Вітаємо з реєстрацією",
             [{ text: "OK", onPress: () => console.log("OK") }],
             { cancelable: false }
           );

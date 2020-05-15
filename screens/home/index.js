@@ -30,11 +30,12 @@ class Home extends Component {
   };
 
   async componentDidMount() {
-    this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
+    let token = await AsyncStorage.getItem("UNIQUE")
+
     const { users } = this.state;
     if (users != null) {
       Object.entries(users).filter((key, index) => {
-        if (key[1].token == this.state.token) {
+        if (key[1].token == token) {
           this.setState({ user_id: key[1].id });
           this.props.getUserName(key[1].id);
         }
