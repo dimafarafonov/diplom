@@ -7,6 +7,7 @@ import {
   Alert,
   AsyncStorage,
   TouchableOpacity,
+  Image
 } from "react-native";
 import Comments from "./components/comments";
 import { connect } from "react-redux";
@@ -24,13 +25,15 @@ class LocationProfile extends React.Component {
     const { locations } = this.state;
     let title = "";
     let description = "";
-
+    let img = "";
     locations.map((marker, index) => {
       marker[1].location_id == this.state.location_id
-        ? ((title = marker[1].title), (description = marker[1].description))
+        ? ((title = marker[1].title),
+          (description = marker[1].description),
+          (img = marker[1].image))
         : null;
     });
-     console.log("this.state.id", this.state.location_id);
+    console.log("this.state.id", this.state.location_id);
     return (
       <View
         style={{
@@ -48,7 +51,10 @@ class LocationProfile extends React.Component {
           {" "}
           Опис - {description || this.props.navigation.state.params.description}
         </Text>
-        <Text> Фотка - </Text>
+        <Image
+          source={{ uri: img }}
+          style={{ width: 50, height: 50, left: 5 }}
+        />
         <Comments location_id={this.state.location_id} />
       </View>
     );

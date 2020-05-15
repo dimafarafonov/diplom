@@ -7,6 +7,7 @@ import {
   Alert,
   AsyncStorage,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
@@ -61,7 +62,7 @@ class LocationList extends React.Component {
             >
               <Text> Назва - {marker[1].title}</Text>
               <Text> Опис - {marker[1].description}</Text>
-              <Text> Фотка - </Text>
+              <Image source={{ uri: marker[1].image }} style={{width:50,height:50,left:5}}/>
             </TouchableOpacity>
           ) : null
         )}

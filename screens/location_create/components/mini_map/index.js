@@ -19,7 +19,7 @@ class MiniMap extends Component {
 
   async componentDidMount() {
     let location = await Location.getCurrentPositionAsync({});
-    console.log("app.js location", location);
+    // console.log("app.js location", location);
     this.setState({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
@@ -27,9 +27,10 @@ class MiniMap extends Component {
   }
 
   render() {
+
     let array = {};
     return (
-      <View style={{height: 200,width:'100%'}}>
+      <View style={{height: 220,width:'100%',bottom:0}}>
         <MapView
           style={{ height: "100%", width: "100%" }}
           region={this.state || this.props.location_create.coords}

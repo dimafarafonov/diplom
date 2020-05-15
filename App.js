@@ -92,7 +92,7 @@ class App extends React.Component {
       if (value !== null) {
         store.dispatch(_retrieveData(value));
       } else {
-        //  store.dispatch(_storeData(value));
+        store.dispatch(_storeData(value));
       }
     } catch (error) {}
   };

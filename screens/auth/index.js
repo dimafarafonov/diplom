@@ -46,10 +46,10 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-    // console.log("this.props.Auth", this.props.auth.have_token);
-    // this.props.auth.have_token
-    //   ? this.props.navigation.navigate("Home")
-    //   : this.props.navigation.navigate("Auth");
+    //  console.log("this.props.Auth", this.props.auth.have_token);
+    this.props.auth.have_token
+      ? this.props.navigation.navigate("Home")
+      : this.props.navigation.navigate("Auth");
   }
 
   checkifUserExist = () => {
