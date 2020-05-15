@@ -391,48 +391,51 @@ class LocationCreate extends React.Component {
                 ]}
               ></ValidationComponent>
               {/* <ValidationComponent */}
-                {/* component={ */}
-                  <Button
-                    title="Виберіть фото для локації"
-                    onPress={this._pickImage}
-                    buttonStyle={{
-                      borderRadius: 30,
-                      backgroundColor: "#465880",
-                      borderColor: "#ced4da",
-                      borderWidth: 2,
-                    }}
-                  />
-                {/* } */}
+              {/* component={ */}
+              <View style={{ bottom: 10, right: 50 }}>
+                <Button
+                  title="Виберіть фото для локації"
+                  onPress={this._pickImage}
+                  buttonStyle={{
+                    borderRadius: 30,
+                    backgroundColor: "#465880",
+                    borderColor: "#ced4da",
+                    borderWidth: 2,
+                    left: 0,
+                  }}
+                />
+              </View>
+              {/* } */}
               {/* ></ValidationComponent> */}
 
+              {/* <ValidationComponent
+                component={ */}
+              <View style={{ bottom: 55, left: 120 }}>
+                <Button
+                  title={"Створити"}
+                  buttonStyle={{
+                    top: 0,
+                    borderRadius: 30,
+                    backgroundColor: "#465880",
+                    borderColor: "#ced4da",
+                    borderWidth: 2,
+                  }}
+                  onPress={() => {
+                    this.form.validate();
+                  }}
+                />
+              </View>
               {image && (
                 <Image
                   source={{ uri: image }}
-                  style={{ width: 50, height: 50, top: 20, bottom: 30 }}
+                  style={{ width: 70, height: 70, bottom: 30 }}
                 />
               )}
-              {/* <ValidationComponent
-                component={ */}
-                  <View>
-                    <Button
-                      title={"Створити"}
-                      buttonStyle={{
-                        top: 0,
-                        borderRadius: 30,
-                        backgroundColor: "#465880",
-                        borderColor: "#ced4da",
-                        borderWidth: 2,
-                      }}
-                      onPress={() => {
-                        this.form.validate();
-                      }}
-                    />
-                  </View>
-                {/* }
+              {/* }
               ></ValidationComponent> */}
             </View>
           </ScrollView>
-          {/* <ValidationComponent component={<MiniMap />}></ValidationComponent> */}
+          <MiniMap />
         </ValidationForm>
       </View>
     );

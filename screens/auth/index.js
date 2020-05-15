@@ -15,7 +15,13 @@ import { _storeData } from "../../reducers/actions";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
 import { Button } from "react-native-elements";
-import { changeProps, setLastWritings, setFetchedUsers,getUserName } from "../home/actions";
+import {
+  changeProps,
+  setLastWritings,
+  setFetchedUsers,
+  getUserName,
+} from "../home/actions";
+import { _retrieveData } from "../../reducers/actions";
 import { bindActionCreators } from "redux";
 import * as firebase from "firebase";
 import uuid from "uuid-random";
@@ -46,7 +52,7 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-    //  console.log("this.props.Auth", this.props.auth.have_token);
+    console.log("this.props.Auth", this.props.auth.have_token);
     this.props.auth.have_token
       ? this.props.navigation.navigate("Home")
       : this.props.navigation.navigate("Auth");
@@ -54,24 +60,45 @@ class Auth extends Component {
 
   checkifUserExist = () => {
     const { login, users } = this.state;
-    let match = false;
+    let match_login = false;
+    let match_pib = false;
     if (users != null) {
+      Object.entries(users).filter((key, index) => {
+        if (key[1].pib == this.state.pib) {
+          (match_pib = true), this.setState({ user_id: key[1].id });
+        }
+      });
       Object.keys(users).filter((key) => {
         if (key == login) {
-          match = true;
+          match_login = true;
         }
       });
     }
-    return match;
+    console.log("match_login");
+    return match_login && match_pib;
   };
-
-  storeHighScore = async (login, pib, token) => {
-  await  firebase.database().ref(`/users/${login}`).set({
+  updateCurrentUser = async (token) => {
+    firebase.database().ref(`/users/${this.state.login}`).update({
+      token: token,
+    });
+    // await this.props._storeData(token);
+    await this.props._retrieveData(token);
+    await this.props.navigation.navigate("Home");
+    Alert.alert(
+      "Успішно",
+      "Ви успішно залогінились",
+      [{ text: "OK", onPress: () => console.log("OK") }],
+      { cancelable: false }
+    );
+    await this.props._storeData(token);
+  };
+  createNewUser = async (login, pib, token) => {
+    await firebase.database().ref(`/users/${login}`).set({
       pib: pib,
       id: uuid(),
       token: token,
     });
-  await  this.props._storeData(token);
+    this.props._storeData(token);
   };
   static getDerivedStateFromError() {}
   render() {
@@ -90,7 +117,7 @@ class Auth extends Component {
         style={{ flex: 1 }}
         onSubmit={() => {
           this.props.setLastWritings(login);
-          this.storeHighScore(login, pib, uuid());
+          this.createNewUser(login, pib, uuid());
           Alert.alert(
             "Успішно",
             "Ви записали нового користувача в базу даних",
@@ -156,8 +183,11 @@ class Auth extends Component {
             ></ValidationComponent>
           </View>
           {!this.state.is_valid ? null : (
-            <Text style={{ color: "red", position: "absolute" }}>
-              Ваш логін не унікальний
+            <Text
+              style={{ color: "red", position: "absolute", top: 30, left: 20 }}
+            >
+              Ваш логін не чи піб не унікальні, якщо ви хочете просто ввійти,
+              введіть коректні данні
             </Text>
           )}
           <ValidationComponent
@@ -192,7 +222,7 @@ class Auth extends Component {
               "максимальна довжина імені 30 символів",
             ]}
           ></ValidationComponent>
-          <View>
+          <View style={{ top: 10 }}>
             <Button
               title={"Зареєструватися"}
               buttonStyle={{
@@ -204,7 +234,8 @@ class Auth extends Component {
               }}
               onPress={() => {
                 if (this.checkifUserExist()) {
-                  this.setState({ is_valid: true });
+                  this.updateCurrentUser(uuid());
+                  // this.setState({ is_valid: true });
                   return;
                 } else {
                   this.form.validate();
@@ -281,6 +312,7 @@ const mapDispatchToProps = (dispatch) =>
       setLastWritings,
       setFetchedUsers,
       _storeData,
+      _retrieveData,
     },
     dispatch
   );

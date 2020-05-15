@@ -102,7 +102,7 @@ class Map extends Component {
             zIndex={9999}
           />
         </MapView>
-
+                {console.log('thi.state.radius',this.state.radius)}
         <Button
           title="Go to home screen"
           onPress={() => {

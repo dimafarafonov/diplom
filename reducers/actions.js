@@ -8,7 +8,7 @@ export function _removeData() {
   }
 }
 
-export function _storeData(token) {
+export async  function _storeData (token) {
   try {
     AsyncStorage.setItem("UNIQUE", token);
   } catch (error) {

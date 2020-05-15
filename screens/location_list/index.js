@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
+import { ScrollView } from "react-native-gesture-handler";
 class LocationList extends React.Component {
   constructor(props) {
     super(props);
@@ -43,6 +44,7 @@ class LocationList extends React.Component {
           fontSize: 40,
         }}
       >
+        <ScrollView>
         {locations.map((marker, index) =>
           marker[1].user_id == this.state.user_id ? (
             <TouchableOpacity
@@ -66,6 +68,8 @@ class LocationList extends React.Component {
             </TouchableOpacity>
           ) : null
         )}
+
+        </ScrollView>
       </View>
     );
   }
