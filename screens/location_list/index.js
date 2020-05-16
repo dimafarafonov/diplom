@@ -51,7 +51,7 @@ class LocationList extends React.Component {
               <TouchableOpacity
                 key={index}
                 style={{
-                  height: 300,
+                  height: 330,
                   width: "95%",
                   backgroundColor: "lightgrey",
                   left: 5,

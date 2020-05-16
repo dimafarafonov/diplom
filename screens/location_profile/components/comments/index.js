@@ -81,15 +81,16 @@ class Comments extends React.Component {
       <View>
         <View style={{ marginTop: "50%" }}>
           <TextInput
-            style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+            style={{ height:40, borderColor: "gray", borderWidth: 1 }}
             onChangeText={(text) => {
               this.setState({ text: text });
             }}
+
             value={this.state.text}
             placeholder={"Тут можна написати відгук"}
             multiline={true}
           />
-          <View style={{ position: "absolute", right: 0, bottom: -5 }}>
+          <View style={{ position: "absolute", right: 0,bottom: -7 }}>
             <Icon
               name="chevron-right"
               type="evilicon"
@@ -108,9 +109,11 @@ class Comments extends React.Component {
           ? Object.entries(comments).map((key, index) => {
               if (key[1].location_id == this.state.location_id) {
                 return (
-                  <View key={index} style={{ marginTop: 30 }}>
-                    <Text style={{ color: "red" }}>{key[1].username}:</Text>
-                    <Text>{key[1].message}</Text>
+                  <View key={index} style={{ marginTop: 15 }}>
+                    <Text style={{ color: "red" }}>
+                      {key[1].username}:{" "}
+                      <Text style={{ color: "black" }}>{key[1].message}</Text>
+                    </Text>
                   </View>
                 );
               }
