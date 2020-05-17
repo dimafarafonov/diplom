@@ -106,11 +106,12 @@ class Auth extends Component {
     // console.log('this.props._storeData(token)',this.props._storeData();
     const { pib, login } = this.state;
     //spinner for no token   !this.props.auth.have_token
-    return !this.props.auth.have_token ? (
-      <View style={[styles.container, styles.horizontal]}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    ) : (
+    return (
+      // !this.props.auth.have_token ? (
+      //   <View style={[styles.container, styles.horizontal]}>
+      //     <ActivityIndicator size="large" color="#0000ff" />
+      //   </View>
+      // ) : (
       <ValidationForm
         ref={(ref) => {
           this.form = ref;
