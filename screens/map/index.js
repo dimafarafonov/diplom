@@ -80,7 +80,7 @@ class Map extends Component {
                 style={{ zIndex: 999, position: "absolute" }}
                 key={index}
                 onPress={() => {
-                  this.props.navigation.navigate("LocationProfile", {
+                  this.props.navigation.push("LocationProfile", {
                     coordinate: marker[1].coords,
                     title: marker[1].title,
                     description: marker[1].description,
