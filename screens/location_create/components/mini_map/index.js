@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, Button, View, Image } from "react-native";
+import { StyleSheet, Button, View, Image, Text } from "react-native";
 import * as Location from "expo-location";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
@@ -49,6 +49,19 @@ class MiniMap extends Component {
             style={{ position: "absolute" }}
             source={require("../../../../assets/marker.png")}
           />
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            top: 2,
+            opacity: 0.6,
+            right: 10,
+            left: 5,
+          }}
+        >
+          <Text style={{ textAlign: "center" }}>
+            Позначте місцезнаходження джерела
+          </Text>
         </View>
       </View>
     );

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
+import { RadioButton } from "react-native-paper";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { withNavigation } from "@react-navigation/compat";
@@ -36,6 +37,7 @@ class LocationCreate extends React.Component {
       togoal_distance: "",
       water_speed: "",
       if_queue: "",
+      checked: "Ні",
     };
   }
   async componentDidMount() {
@@ -93,6 +95,7 @@ class LocationCreate extends React.Component {
           }}
           style={{ height: "100%", top: 0, position: "relative" }}
           onSubmit={() => {
+            this.props.navigation.push("Map");
             Alert.alert(
               "Успішно",
               "Створена нова локація",
@@ -114,7 +117,7 @@ class LocationCreate extends React.Component {
                         image: this.state.image,
                         labs_results: this.state.labs_results,
                         togoal_distance: this.state.togoal_distance,
-                        if_queue: this.state.if_queue,
+                        if_queue: this.state.checked,
                         water_speed: this.state.water_speed,
                       });
                   },
@@ -129,6 +132,7 @@ class LocationCreate extends React.Component {
           }}
         >
           <ScrollView>
+            <MiniMap />
             <View
               style={{
                 justifyContent: "center",
@@ -351,48 +355,91 @@ class LocationCreate extends React.Component {
                   color: "red",
                   position: "absolute",
                 }}
-                validators={["required", "minNumber:1", "maxNumber:50"]}
+                validators={["required", "minFloat:0.1", "maxFloat:50"]}
                 errorMessages={[
                   "*Заповнити обов'язково  ",
-                  "Мінімальна швидкість 1",
+                  "Мінімальна швидкість 0.1",
                   "Максимальна швидкість 75",
                 ]}
               ></ValidationComponent>
               <ValidationComponent
-                style={styles.input}
+                style={{ bottom: 10 }}
                 component={
-                  <TextInput
-                    onChangeText={(value) => {
-                      this.setState({ if_queue: value });
-                    }}
-                    multiline={true}
-                    numberOfLines={3}
-                    value={this.state.if_queue}
-                    placeholder={"Наявність черги до джерела"}
-                    textAlignVertical={"top"}
-                    style={{ padding: 10, paddingBottom: 5 }}
-                    onFocus={() => {
-                      this.setState({ activeDesc: true });
-                    }}
-                    onBlur={() => {
-                      this.setState({ activeDesc: false });
-                    }}
-                  />
+                  // <TextInput
+                  //   onChangeText={(value) => {
+                  //     this.setState({ if_queue: value });
+                  //   }}
+                  //   multiline={true}
+                  //   numberOfLines={3}
+                  //   value={this.state.if_queue}
+                  //   placeholder={"Наявність черги до джерела"}
+                  //   textAlignVertical={"top"}
+                  //   style={{ padding: 10, paddingBottom: 5 }}
+                  //   onFocus={() => {
+                  //     this.setState({ activeDesc: true });
+                  //   }}
+                  //   onBlur={() => {
+                  //     this.setState({ activeDesc: false });
+                  //   }}
+                  // />
+                  <View>
+                    <Text
+                      style={{
+                        padding: 10,
+                        backgroundColor: "#465880",
+                        width: "100%",
+                        borderRadius: 5,
+                        top:10
+                      }}
+                    >
+                      Наявність черги до джерела
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        top:10,
+                        bottom:5
+                      }}
+                    >
+                      <Text>Так</Text>
+                      <RadioButton
+                        value="Так"
+                        status={
+                          this.state.checked === "Так" ? "checked" : "unchecked"
+                        }
+                        onPress={() => {
+                          this.setState({ checked: "Так" });
+                        }}
+                      />
+                      <Text>Ні</Text>
+                      <RadioButton
+                        value="Ні"
+                        status={
+                          this.state.checked === "Ні" ? "checked" : "unchecked"
+                        }
+                        onPress={() => {
+                          this.setState({ checked: "Ні" });
+                        }}
+                      />
+                    </View>
+                  </View>
                 }
-                errorMessageStyle={{
-                  color: "red",
-                  position: "absolute",
-                }}
-                validators={["required", "minNumber:5", "maxNumber:120"]}
-                errorMessages={[
-                  "*Заповнити обов'язково",
-                  "Мінімальний час черги 5хв",
-                  "Максимальнтй час черги 120хв",
-                ]}
+                // errorMessageStyle={{
+                //   color: "red",
+                //   position: "absolute",
+                // }}
+                // validators={["required", "minNumber:5", "maxNumber:120"]}
+                // errorMessages={[
+                //   "*Заповнити обов'язково",
+                //   "Мінімальний час черги 5хв",
+                //   "Максимальнтй час черги 120хв",
+                // ]}
               ></ValidationComponent>
               {/* <ValidationComponent */}
               {/* component={ */}
-              <View style={{ bottom: 10, right: 50 }}>
+              <View style={{ bottom: 0, right: 50 }}>
                 <Button
                   title="Виберіть фото для локації"
                   onPress={this._pickImage}
@@ -410,7 +457,7 @@ class LocationCreate extends React.Component {
 
               {/* <ValidationComponent
                 component={ */}
-              <View style={{ bottom: 55, left: 120 }}>
+              <View style={{ bottom: 45, left: 120 }}>
                 <Button
                   title={"Створити"}
                   buttonStyle={{
@@ -428,13 +475,12 @@ class LocationCreate extends React.Component {
               {image && (
                 <Image
                   source={{ uri: image }}
-                  style={{ width: 70, height: 70, bottom: 30 }}
+                  style={{ width: "90%", height: 200, bottom: 30 }}
                 />
               )}
               {/* }
               ></ValidationComponent> */}
             </View>
-            <MiniMap />
           </ScrollView>
         </ValidationForm>
       </View>
