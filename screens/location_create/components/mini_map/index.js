@@ -60,7 +60,7 @@ class MiniMap extends Component {
           }}
         >
           <Text style={{ textAlign: "center" }}>
-            Позначте місцезнаходження джерела
+            Позначте місце знаходження джерела
           </Text>
         </View>
       </View>

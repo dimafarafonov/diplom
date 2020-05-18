@@ -41,7 +41,6 @@ class LocationCreate extends React.Component {
     };
   }
   async componentDidMount() {
-    console.log("this.state.id", this.state.user_id);
     this.getPermissionAsync();
     this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
     const { users } = this.state;
@@ -84,12 +83,10 @@ class LocationCreate extends React.Component {
       
       // this.setState({ image: result.base64 });
     } catch (E) {
-      console.log("E", E);
     }
   };
   render() {
     let { image } = this.state;
-    // console.log("image", this.state);
     return (
       <View style={{ flex: 1 }}>
         <ValidationForm
@@ -106,7 +103,6 @@ class LocationCreate extends React.Component {
                 {
                   text: "OK",
                   onPress: () => {
-                    console.log("succes added fields in database");
                     firebase
                       .database()
                       .ref(`/locations/${this.state.title}`)
@@ -130,7 +126,6 @@ class LocationCreate extends React.Component {
             );
           }}
           onError={(error) => {
-            console.log("error", error);
             return 0;
           }}
         >
@@ -393,6 +388,7 @@ class LocationCreate extends React.Component {
                         backgroundColor: "#465880",
                         width: "100%",
                         borderRadius: 5,
+                        color: 'white',
                         top:10
                       }}
                     >
@@ -442,7 +438,13 @@ class LocationCreate extends React.Component {
               ></ValidationComponent> */}
               {/* <ValidationComponent */}
               {/* component={ */}
-              <View style={{ bottom: 0, right: 50 }}>
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: "90%", height: 200, marginBottom: 30, marginTop: 10, }}
+                />
+              )}
+              <View style={{ bottom: 0, width: "90%"}}>
                 <Button
                   title="Виберіть фото для локації"
                   onPress={this._pickImage}
@@ -460,27 +462,24 @@ class LocationCreate extends React.Component {
 
               {/* <ValidationComponent
                 component={ */}
-              <View style={{ bottom: 45, left: 120 }}>
+              <View style={{ width: "90%", marginTop: 20, marginBottom: 10}}>
                 <Button
                   title={"Створити"}
-                  buttonStyle={{
-                    top: 0,
-                    borderRadius: 30,
-                    backgroundColor: "#465880",
-                    borderColor: "#ced4da",
-                    borderWidth: 2,
-                  }}
+                  
                   onPress={() => {
                     this.form.validate();
                   }}
                 />
-              </View>
-              {image && (
-                <Image
-                  source={{ uri: image }}
-                  style={{ width: "90%", height: 200, bottom: 30 }}
+                <Button
+                  title={"Назад"}
+                  containerStyle={{marginTop: 10,}}
+                  buttonStyle={{backgroundColor: 'black'}}
+                  onPress={() => {
+                    this.props.navigation.goBack();
+                  }}
                 />
-              )}
+              </View>
+              
               {/* }
               ></ValidationComponent> */}
             </View>

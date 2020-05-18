@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import { ValidationForm, ValidationComponent } from "react-native-validation";
-import gerelo from "../../assets/gerelo.png";
+import gerelo from "../../assets/icon.png";
 import { _storeData } from "../../reducers/actions";
 import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from '@react-navigation/native';
@@ -152,7 +152,7 @@ class Auth extends Component {
         >
           <Image
             source={gerelo}
-            style={{ bottom: 40, width: 240, height: 65 }}
+            style={{ bottom: 50, width: 240, height: 240 }}
           />
           <View style={styles.input}>
             <ValidationComponent
