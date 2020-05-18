@@ -122,7 +122,7 @@ class LocationList extends React.Component {
                       let location = await firebase
                         .database()
                         .ref(`/locations/${marker[1].title}`);
-                       await location.remove();
+                      await location.remove();
                       await firebase
                         .database()
                         .ref("locations")

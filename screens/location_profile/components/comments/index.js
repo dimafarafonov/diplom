@@ -5,11 +5,12 @@ import {
   StyleSheet,
   TextInput,
   Alert,
+  Image,
   AsyncStorage,
   TouchableOpacity,
 } from "react-native";
 import * as firebase from "firebase";
-import { Icon } from "react-native-elements";
+import { Icon, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
 import uuid from "uuid-random";
@@ -31,22 +32,18 @@ class Comments extends React.Component {
     // console.log('this.props.have_token',this.props.auth.have_token)
     if (users != null) {
       Object.entries(users).filter((key, index) => {
-        if (key[1].token == this.state.token) console.log("this. have workerd");
-        this.setState({ user_id: key[1].id });
+        if (key[1].token == this.state.token)
+          this.setState({ user_id: key[1].id, username: key[1].pib });
       });
     }
-    // const { users, user_id } = this.state;
-    let value = "";
-    Object.getOwnPropertyNames(users).forEach(function (val, idx, array) {
-      // console.log('users on location',users[val].id)
-      // console.log('users on location1',user_id)
-      // console.log('users on location2',val)
-      if (users[val].id == user_id) {
-        value = val;
-      }
-      console.log("value", value);
-    });
-    this.setState({ username: value });
+    // let value = "";
+    // Object.getOwnPropertyNames(users).forEach(function (val, idx, array) {
+    //   if (users[val].id == user_id) {
+    //     value = val;
+    //   }
+    //   console.log("value", value);
+    // });
+    // this.setState({ username: value });
   }
   createComment = () => {
     if (!this.state.text) return;
@@ -79,23 +76,32 @@ class Comments extends React.Component {
     const { comments } = this.state;
     return (
       <View>
-        <View style={{ marginTop: "50%" }}>
+        <View style={{ marginTop: "2%" }}>
           <TextInput
-            style={{ height:40, borderColor: "gray", borderWidth: 1 }}
+            style={{
+              height: 40,
+
+              borderWidth: 1,
+              borderRadius: 10,
+              paddingLeft: 10,
+              borderColor:'lightgrey',
+              backgroundColor: "white",
+              width:'90%',
+              left:'5%'
+            }}
             onChangeText={(text) => {
               this.setState({ text: text });
             }}
-
             value={this.state.text}
             placeholder={"Тут можна написати відгук"}
             multiline={true}
           />
-          <View style={{ position: "absolute", right: 0,bottom: -7 }}>
+          <View style={{ position: "absolute", right: '6%', bottom: 2 }}>
             <Icon
-              name="chevron-right"
-              type="evilicon"
+              name="send"
+              type="send"
               color="#517fa4"
-              size={70}
+              size={35}
               underlayColor="transparent"
               onPress={() => {
                 this.createComment();
@@ -103,14 +109,29 @@ class Comments extends React.Component {
             />
           </View>
         </View>
-        <Text>Відгуки:</Text>
+        {/* <Text>Відгуки:</Text> */}
 
         {comments
           ? Object.entries(comments).map((key, index) => {
               if (key[1].location_id == this.state.location_id) {
                 return (
-                  <View key={index} style={{ marginTop: 15 }}>
-                    <Text style={{ color: "red" }}>
+                  <View
+                    key={index}
+                    style={{
+                      marginTop: 15,
+                      backgroundColor: "lightgrey",
+                      padding: 15,
+                      width:'90%',
+                      left:'5%',
+                      borderRadius:30
+                    }}
+                  >
+                    <Image
+                      source={require("../../../../assets/nobody.jpg")}
+                      style={{ width: 50, height: 50, borderRadius: 50 }}
+                      resizeMode={"contain"}
+                    />
+                    <Text style={{ color: "green",fontWeight:'bold' }}>
                       {key[1].username}:{" "}
                       <Text style={{ color: "black" }}>{key[1].message}</Text>
                     </Text>
