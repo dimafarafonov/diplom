@@ -73,13 +73,16 @@ class LocationCreate extends React.Component {
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
+        base64: true
       });
+
       if (!result.cancelled) {
-        this.setState({ image: result.uri });
+        const img = `data:image/png;base64,${result.base64}`
+        this.setState({ image: img });
       }
 
-      console.log("result", result);
-      this.setState({ image: result.uri });
+      
+      // this.setState({ image: result.base64 });
     } catch (E) {
       console.log("E", E);
     }
@@ -175,11 +178,11 @@ class LocationCreate extends React.Component {
                   }}
                   validators={[
                     "required",
-                    "minStringLength:5",
+                    "minStringLength:2",
                     "maxStringLength:30",
                   ]}
                   errorMessages={[
-                    "*Заповнити обов'язково title",
+                    "*Заповнити обов'язково",
                     "мінамільна довжина назви 5 символів",
                     "максимальна довжина назви 30 символів",
                   ]}
@@ -285,12 +288,12 @@ class LocationCreate extends React.Component {
                 }}
                 validators={[
                   "required",
-                  "minStringLength:10",
+                  "minStringLength:3",
                   "maxStringLength:100",
                 ]}
                 errorMessages={[
                   "*Заповнити обов'язково  ",
-                  "мінімальна довжина 30 символів",
+                  "мінімальна довжина 3 символів",
                   "максимальна довжина 100 символів",
                 ]}
               ></ValidationComponent>
@@ -321,12 +324,12 @@ class LocationCreate extends React.Component {
                 }}
                 validators={[
                   "required",
-                  "minStringLength:10",
+                  "minStringLength:3",
                   "maxStringLength:100",
                 ]}
                 errorMessages={[
                   "*Заповнити обов'язково  ",
-                  "Мінімальна довжина 30 символів",
+                  "Мінімальна довжина 3 символів",
                   "Максимальна довжина 100 символів",
                 ]}
               ></ValidationComponent>
