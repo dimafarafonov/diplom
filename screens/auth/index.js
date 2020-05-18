@@ -13,6 +13,7 @@ import { ValidationForm, ValidationComponent } from "react-native-validation";
 import gerelo from "../../assets/gerelo.png";
 import { _storeData } from "../../reducers/actions";
 import { withNavigation } from "@react-navigation/compat";
+import { CommonActions } from '@react-navigation/native';
 import { connect } from "react-redux";
 import { Button } from "react-native-elements";
 import {
@@ -51,12 +52,20 @@ class Auth extends Component {
         this.setState({ loading: false, users: users });
       });
   }
-  // componentDidUpdate() {
-  //   console.log("this.props.Auth", this.props.auth.have_token);
-  //   // this.props.auth.have_token
-  //   //   ? this.props.navigation.navigate("Home")
-  //   //   : this.props.navigation.navigate("Auth");
-  // }
+  componentDidUpdate() {
+    // console.log("this.props.Auth", this.props.auth.have_token);
+    if (this.props.auth.have_token) {
+      const resetAction =  CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: 'Map' },
+        ],
+      })
+      this.props.navigation.dispatch(resetAction);
+    } else {
+      this.props.navigation.navigate("Auth");
+    }
+  }
 
   checkifUserExist = () => {
     const { login, users } = this.state;
@@ -106,12 +115,11 @@ class Auth extends Component {
     // console.log('this.props._storeData(token)',this.props._storeData();
     const { pib, login } = this.state;
     //spinner for no token   !this.props.auth.have_token
-    return (
-      // !this.props.auth.have_token ? (
-      //   <View style={[styles.container, styles.horizontal]}>
-      //     <ActivityIndicator size="large" color="#0000ff" />
-      //   </View>
-      // ) : (
+    return !this.props.auth.have_token && !this.props.auth.position.coords ? (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    ) : (
       <ValidationForm
         ref={(ref) => {
           this.form = ref;

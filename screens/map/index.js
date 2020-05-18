@@ -15,8 +15,8 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: this.props.auth.position.coords.latitude,
-      longitude: this.props.auth.position.coords.longitude,
+      latitude: 37.78825||this.props.auth.position.coords.latitude,
+      longitude: -122.4324||this.props.auth.position.coords.longitude,
       latitudeDelta: 0.1,
       longitudeDelta: 0.1,
       locations: [],
@@ -99,7 +99,7 @@ class Map extends Component {
             radius={this.state.radius}
             strokeWidth={1}
             strokeColor="#3399ff"
-            fillColor="rgba(120,120,120,0.5)"
+            fillColor="rgba(32, 137, 220,0.2)"
             zIndex={9999}
           />
         </MapView>
