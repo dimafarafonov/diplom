@@ -70,7 +70,6 @@ class LocationList extends React.Component {
 
   render() {
     const { locations } = this.state;
-    console.log("LocationList -> render -> locations", locations);
     return (
       <View style={styles.container}>
         <Text
@@ -143,12 +142,21 @@ class LocationList extends React.Component {
           )}
         </ScrollView>
         <Button
-          icon={<Icon name="arrow-right" size={15} color="white" />}
-          containerStyle={{ marginHorizontal: 20, marginBottom: 20 }}
+          icon={<Icon name="plus" size={15} color="white" />}
+          containerStyle={{ marginHorizontal: 20, marginBottom: 10 }}
           title=" Створити нове джерело"
           onPress={() => {
             // this.props.changeProps("from Map"),
             this.props.navigation.navigate("LocationCreate");
+          }}
+        />
+        <Button
+          containerStyle={{ marginHorizontal: 20, marginBottom: 20 }}
+          title="Назад"
+          buttonStyle={{backgroundColor: 'black'}}
+          onPress={() => {
+            // this.props.changeProps("from Map"),
+            this.props.navigation.goBack();
           }}
         />
       </View>
