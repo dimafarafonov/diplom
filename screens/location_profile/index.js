@@ -23,6 +23,13 @@ class LocationProfile extends React.Component {
     };
   }
   componentDidMount() {}
+  noLocations = () => {
+    return this.state.locations ? null : (
+      <View>
+        <Text>ахахахаххах в тебе нічого не має</Text>
+      </View>
+    );
+  };
   render() {
     const { locations } = this.state;
     let title = "";
@@ -46,6 +53,7 @@ class LocationProfile extends React.Component {
         : null;
     });
     console.log("this.state.id", this.state.location_id);
+    this.noLocations();
     return (
       <View
         style={{

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-maps";
 
-import { StyleSheet, Button, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as Location from "expo-location";
+import { Button } from "react-native-elements";
 import Seacrh from "./components/search";
 import { withNavigation } from "@react-navigation/compat";
 import { connect } from "react-redux";
@@ -81,9 +82,9 @@ class Map extends Component {
                 onPress={() => {
                   this.props.navigation.navigate("LocationProfile", {
                     coordinate: marker[1].coords,
-                    title:marker[1].title,
-                    description:marker[1].description,
-                    location_id:marker[1].location_id
+                    title: marker[1].title,
+                    description: marker[1].description,
+                    location_id: marker[1].location_id,
                   });
                 }}
                 coordinate={marker[1].coords}
@@ -102,12 +103,40 @@ class Map extends Component {
             zIndex={9999}
           />
         </MapView>
-                {console.log('thi.state.radius',this.state.radius)}
+        {console.log("thi.state.radius", this.state.radius)}
         <Button
-          title="Go to home screen"
+          title="Створити локацію"
+          buttonStyle={{
+            position: "absolute",
+            left:125,
+            top: 5,
+            borderRadius: 50,
+            paddingTop:5,
+            paddingBottom:10,
+            paddingLeft:15,
+            paddingRight:15,
+            backgroundColor:'green'
+          }}
           onPress={() => {
-            this.props.changeProps("from Map"),
-              this.props.navigation.navigate("Home");
+            // this.props.changeProps("from Map"),
+              this.props.navigation.navigate("LocationCreate");
+          }}
+        ></Button>
+        <Button
+          title="Мої локації"
+          buttonStyle={{
+            position: "absolute",
+            left:5,
+            top:5,
+            borderRadius: 50,
+            paddingTop:5,
+            paddingBottom:10,
+            paddingLeft:15,
+            paddingRight:15,
+          }}
+          onPress={() => {
+            // this.props.changeProps("from Map"),
+              this.props.navigation.navigate("LocationList");
           }}
           color="orange"
         ></Button>

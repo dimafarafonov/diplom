@@ -434,8 +434,8 @@ class LocationCreate extends React.Component {
               {/* }
               ></ValidationComponent> */}
             </View>
+            <MiniMap />
           </ScrollView>
-          <MiniMap />
         </ValidationForm>
       </View>
     );

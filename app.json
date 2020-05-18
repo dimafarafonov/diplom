@@ -32,6 +32,7 @@
     },
     "android": {
       "package": "adr.gerelo.gerelo"
-  }
+    },
+    "description": ""
   }
 }

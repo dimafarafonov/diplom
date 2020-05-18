@@ -27,26 +27,29 @@ class MiniMap extends Component {
   }
 
   render() {
-
     let array = {};
     return (
-      <View style={{height: 220,width:'100%',bottom:0}}>
+      <View style={{ height: 220, width: "100%", bottom: 0 }}>
         <MapView
           style={{ height: "100%", width: "100%" }}
-          region={this.state || this.props.location_create.coords}
+          region={this.state}
           onRegionChangeComplete={(region) => {
             array = {
               longitude: region.longitude,
               latitude: region.latitude,
+              latitudeDelta: region.latitudeDelta,
+              longitudeDelta: region.longitudeDelta,
             };
             this.props.setCoords(array);
             this.setState(array);
           }}
-        >
-        </MapView>
-        <View style={{ position:'absolute',left:'47%',top:'38%' }}>
-            <Image  style={{position:'absolute'}} source={require('../../../../assets/marker.png')} />
-          </View>
+        ></MapView>
+        <View style={{ position: "absolute", left: "47%", top: "38%" }}>
+          <Image
+            style={{ position: "absolute" }}
+            source={require("../../../../assets/marker.png")}
+          />
+        </View>
       </View>
     );
   }

@@ -51,12 +51,12 @@ class Auth extends Component {
         this.setState({ loading: false, users: users });
       });
   }
-  componentDidUpdate() {
-    console.log("this.props.Auth", this.props.auth.have_token);
-    // this.props.auth.have_token
-    //   ? this.props.navigation.navigate("Home")
-    //   : this.props.navigation.navigate("Auth");
-  }
+  // componentDidUpdate() {
+  //   console.log("this.props.Auth", this.props.auth.have_token);
+  //   // this.props.auth.have_token
+  //   //   ? this.props.navigation.navigate("Home")
+  //   //   : this.props.navigation.navigate("Auth");
+  // }
 
   checkifUserExist = () => {
     const { login, users } = this.state;
@@ -83,7 +83,7 @@ class Auth extends Component {
     });
     // await this.props._storeData(token);
     await this.props._retrieveData(token);
-    await this.props.navigation.navigate("Home");
+    await this.props.navigation.navigate("Map");
     Alert.alert(
       "Успішно",
       "Ви успішно залогінились",
@@ -98,7 +98,7 @@ class Auth extends Component {
       id: uuid(),
       token: token,
     });
-    this.props.navigation.navigate("Home");
+    this.props.navigation.navigate("Map");
     this.props._storeData(token);
   };
   static getDerivedStateFromError() {}
@@ -255,7 +255,7 @@ class Auth extends Component {
             width: "100%",
           }}
         >
-          <Button
+          {/* <Button
             title={"Подивитися що в базі - Додому"}
             buttonStyle={{
               width: "90%",
@@ -264,7 +264,7 @@ class Auth extends Component {
             onPress={() => {
               this.props.navigation.navigate("Home");
             }}
-          />
+          /> */}
           {/* <Button
             title={"checkifExists"}
             buttonStyle={{
