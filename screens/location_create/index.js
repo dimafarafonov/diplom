@@ -365,27 +365,28 @@ class LocationCreate extends React.Component {
                   "Максимальна швидкість 75",
                 ]}
               ></ValidationComponent>
-              <ValidationComponent
+              {/* <ValidationComponent
                 style={{ bottom: 10 }}
                 component={
-                  // <TextInput
-                  //   onChangeText={(value) => {
-                  //     this.setState({ if_queue: value });
-                  //   }}
-                  //   multiline={true}
-                  //   numberOfLines={3}
-                  //   value={this.state.if_queue}
-                  //   placeholder={"Наявність черги до джерела"}
-                  //   textAlignVertical={"top"}
-                  //   style={{ padding: 10, paddingBottom: 5 }}
-                  //   onFocus={() => {
-                  //     this.setState({ activeDesc: true });
-                  //   }}
-                  //   onBlur={() => {
-                  //     this.setState({ activeDesc: false });
-                  //   }}
-                  // />
-                  <View>
+
+                  <TextInput
+                    onChangeText={(value) => {
+                      this.setState({ if_queue: value });
+                    }}
+                    multiline={true}
+                    numberOfLines={3}
+                    value={this.state.if_queue}
+                    placeholder={"Наявність черги до джерела"}
+                    textAlignVertical={"top"}
+                    style={{ padding: 10, paddingBottom: 5 }}
+                    onFocus={() => {
+                      this.setState({ activeDesc: true });
+                    }}
+                    onBlur={() => {
+                      this.setState({ activeDesc: false });
+                    }}
+                  /> */}
+                  <View style={{bottom:15}}>
                     <Text
                       style={{
                         padding: 10,
@@ -403,7 +404,6 @@ class LocationCreate extends React.Component {
                         justifyContent: "center",
                         alignItems: "center",
                         top:10,
-                        bottom:5
                       }}
                     >
                       <Text>Так</Text>
@@ -428,18 +428,18 @@ class LocationCreate extends React.Component {
                       />
                     </View>
                   </View>
-                }
-                // errorMessageStyle={{
-                //   color: "red",
-                //   position: "absolute",
-                // }}
-                // validators={["required", "minNumber:5", "maxNumber:120"]}
-                // errorMessages={[
-                //   "*Заповнити обов'язково",
-                //   "Мінімальний час черги 5хв",
-                //   "Максимальнтй час черги 120хв",
-                // ]}
-              ></ValidationComponent>
+                {/* }
+                errorMessageStyle={{
+                  color: "red",
+                  position: "absolute",
+                }}
+                validators={["required", "minNumber:5", "maxNumber:120"]}
+                errorMessages={[
+                  "*Заповнити обов'язково",
+                  "Мінімальний час черги 5хв",
+                  "Максимальнтй час черги 120хв",
+                ]}
+              ></ValidationComponent> */}
               {/* <ValidationComponent */}
               {/* component={ */}
               <View style={{ bottom: 0, right: 50 }}>

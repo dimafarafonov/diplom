@@ -1,6 +1,6 @@
 const default_state = {
   have_token: false,
-  locations: {},
+  locations: [],
   position: {},
   comments: [],
 };
