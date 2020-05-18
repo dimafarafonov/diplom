@@ -61,7 +61,7 @@ class App extends React.Component {
   //   }
   // };
   getCurrentPosition = async () => {
-    let location = await Location.getCurrentPositionAsync({});
+    const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
     // console.log("app.js location", location);
     store.dispatch(_getCurrentPosition(location));
   };

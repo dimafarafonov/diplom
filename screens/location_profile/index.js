@@ -14,6 +14,10 @@ import { connect } from "react-redux";
 import MyText from "./components/custom_text";
 import { withNavigation } from "@react-navigation/compat";
 import { ScrollView } from "react-native-gesture-handler";
+
+const color = '#2089DC';
+
+
 class LocationProfile extends React.Component {
   constructor(props) {
     super(props);
@@ -22,14 +26,8 @@ class LocationProfile extends React.Component {
       location_id: this.props.navigation.state.params.location_id,
     };
   }
-  componentDidMount() {}
-  noLocations = () => {
-    return this.state.locations ? null : (
-      <View>
-        <Text>ахахахаххах в тебе нічого не має</Text>
-      </View>
-    );
-  };
+  
+
   render() {
     const { locations } = this.state;
     let title = "";
@@ -52,61 +50,52 @@ class LocationProfile extends React.Component {
           (water_speed = marker[1].water_speed))
         : null;
     });
-    console.log("this.state.id", this.state.location_id);
-    this.noLocations();
+
+
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "flex-start",
-          fontSize: 40,
-        }}
-      >
-        <ScrollView>
-          <View>
-            <MyText>
-              <Text>
-                {" "}
-                Назва - {title} {"\n"}
-              </Text>
-              <Text>
-                {" "}
-                Швидкість води - {water_speed} л/с {"\n"}
-              </Text>
-              <Text>
-                {" "}
-                Якість води - {water_rate} {"\n"}
-              </Text>
-              <Text>
-                {" "}
-                Результати лабораторних досліджень - {labs_results} {"\n"}
-              </Text>
-              <Text>
-                {" "}
-                Можливість під'їзду до джерела - {togoal_distance} {"\n"}
-              </Text>
-              <Text>
-                {" "}
-                Черга до джерела - {if_queue} хв {"\n"}
-              </Text>
-              <Text>
-                {" "}
-                Опис - {description} {"\n"}
-              </Text>
-            </MyText>
-            {/* <Text> Опис - {description}</Text> */}
+        <ScrollView style={styles.container}>
             <Image
               source={{ uri: img }}
-              style={{ width: 200, height: 200, left: 10 }}
+              style={{ width: '100%', height: 200}}
             />
-          </View>
-          <Comments location_id={this.state.location_id} />
+            <View style={styles.content}>
+              <Text style={styles.title}>{title}</Text>
+              <Text>Швидкість води: {water_speed}л/с</Text>
+              <Text>Якість води - {water_rate}</Text>
+              <Text style={{paddingBottom: 10,}}>Черга до джерела - {if_queue}</Text>
+              <View style={{backgroundColor: '#F6F8FA', padding: 10, marginBottom: 10,}}>
+                <Text style={{paddingBottom: 10,}}>Можливість під'їзду до джерела:</Text>
+                <Text>{togoal_distance}</Text>
+              </View>
+              <View style={{backgroundColor: '#F6F8FA', padding: 10, marginBottom: 10,}}>
+                <Text style={{paddingBottom: 10,}}>Результати лабораторних досліджень:</Text>
+                <Text>{labs_results}</Text>
+              </View>
+              <View style={{backgroundColor: '#F6F8FA', padding: 10, marginBottom: 10,}}>
+                <Text style={{paddingBottom: 10,}}>Опис місця:</Text>
+                <Text>{description}</Text>
+              </View>
+            </View>
+            <Comments location_id={this.state.location_id} />
         </ScrollView>
-      </View>
     );
   }
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    padding: 10,
+  },
+  title: {
+    color, 
+    fontSize: 22,
+    borderBottomColor: color,
+    borderBottomWidth: 1,
+    marginBottom: 10,
+  }
+});
 const mapStateToProps = (state) => {
   const { auth, home, location_create } = state;
   return { auth, home, location_create };

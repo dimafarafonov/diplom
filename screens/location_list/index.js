@@ -14,6 +14,12 @@ import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-elements";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+
+const color = '#2089DC';
+
 class LocationList extends React.Component {
   constructor(props) {
     super(props);
@@ -62,121 +68,68 @@ class LocationList extends React.Component {
     // }
   };
 
+
   render() {
-    // console.log("this.satte.username", this.state.username);
-    // let count = 0;
     const { locations } = this.state;
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "flex-start",
-          marginTop: 25,
-          left: 0,
-          fontSize: 40,
+    console.log("LocationList -> render -> locations", locations)
+    return <View style={styles.container}>
+      <Text style={{backgroundColor: 'white', fontSize: 20, paddingVertical: 10, textAlign: 'center'}}>Мої джерела води</Text>
+      <ScrollView style={styles.list}>
+      {locations.map((marker, index) =>
+        marker[1].user_id == this.state.user_id && 
+        <TouchableOpacity key={index} style={styles.item} onPress={() =>
+          this.props.navigation.navigate("LocationProfile", {
+            location_id: marker[1].location_id,
+          })
+        }>
+          <Image
+            source={{ uri: marker[1].image || 'https://lh3.googleusercontent.com/proxy/VEKfTKETyJ6KVe8-A34Li7Bu70PBh9hL67o2zTdVscrQYBsN4TYybTnaTg7WwrjUhqhRLOFKxTJC826-abEAq-ka9BgP9GXb82Cfj-whjjFQ0w' }}
+            style={{ width: 100, height: 100, marginRight: 10 }}
+          /><View>
+            <Text style={{color, fontSize: 18}}> {marker[1].title} </Text>
+            <Text>{marker[1].description}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      </ScrollView>
+      <Button
+        icon={
+          <Icon
+            name="arrow-right"
+            size={15}
+            color="white"
+          />
+        }
+        containerStyle={{marginHorizontal: 20, marginBottom: 20,}}
+        title=" Створити нове джерело"
+        onPress={() => {
+          // this.props.changeProps("from Map"),
+          this.props.navigation.navigate("LocationCreate");
         }}
-      >
-        <Button
-          title="+"
-          buttonStyle={{
-            position: "absolute",
-            right: 5,
-            top: -20  ,
-            zIndex:9999,
-            borderRadius: 50,
-            paddingTop: 5,
-            paddingBottom: 10,
-            paddingLeft: 15,
-            paddingRight: 15,
-          }}
-          onPress={() => {
-            // this.props.changeProps("from Map"),
-            this.props.navigation.navigate("LocationCreate");
-          }}
-          color="orange"
-        ></Button>
-        {this.isNoUsersLocations()}
-        <ScrollView>
-          {locations.map((marker, index) =>
-            marker[1].user_id == this.state.user_id ? (
-              <TouchableOpacity
-                key={index}
-                style={{
-                  height: 330,
-                  width: "95%",
-                  backgroundColor: "lightgrey",
-                  left: 5,
-                  marginBottom: 20,
-                }}
-                onPress={() =>
-                  this.props.navigation.navigate("LocationProfile", {
-                    location_id: marker[1].location_id,
-                  })
-                }
-              >
-                {/* {count++} */}
-                <MyText>
-                  <Text>
-                    {" "}
-                    Назва: {marker[1].title} {"\n"}
-                  </Text>
-                  <Text>
-                    {" "}
-                    Швидкість води: {marker[1].water_speed} л/с {"\n"}
-                  </Text>
-                  <Text>
-                    {" "}
-                    Якість води: {marker[1].water_rate} {"\n"}
-                  </Text>
-                  <Text>
-                    {" "}
-                    Результати лабораторних досліджень: {
-                      marker[1].labs_results
-                    }{" "}
-                    {"\n"}
-                  </Text>
-                  <Text>
-                    {" "}
-                    Можливість під'їзду до джерела: {
-                      marker[1].togoal_distance
-                    }{" "}
-                    {"\n"}
-                  </Text>
-                  <Text>
-                    {" "}
-                    Черга до джерела: {marker[1].if_queue} хв {"\n"}
-                  </Text>
-                  <Text>
-                    {" "}
-                    Опис: {marker[1].description} {"\n"}
-                  </Text>
-                  <Text> Фото: {"\n"}</Text>
-                </MyText>
-                <Image
-                  source={{ uri: marker[1].image }}
-                  style={{ width: 100, height: 100, left: 5 }}
-                />
-              </TouchableOpacity>
-            ) : null
-          )}
-        </ScrollView>
-      </View>
-    );
+      />
+    </View>;
   }
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: '100%'
+  }, 
+  list: {
+    flex: 1,
+    padding: 20,
+    marginBottom: 10,
+  }, 
+  item: {
+    backgroundColor: 'white',
+    marginBottom: 20,
+    padding: 5,
+    display: 'flex',
+    flexDirection: 'row',
+  }
+});
 const mapStateToProps = (state) => {
   const { auth, home, location_create } = state;
   return { auth, home, location_create };
 };
-// const mapDispatchToProps = (dispatch) =>
-//   bindActionCreators(
-//     {
-//       changeProps,
-//       setLastWritings,
-//       setFetchedUsers,
-//     },
-//     dispatch
-//   );
-
 export default withNavigation(connect(mapStateToProps)(LocationList));
