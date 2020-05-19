@@ -18,11 +18,15 @@ class MiniMap extends Component {
   }
 
   async componentDidMount() {
-    let location = await Location.getCurrentPositionAsync({});
-    this.setState({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
+    try {
+      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      this.setState({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    } catch (error) {
+      
+    }
   }
 
   render() {

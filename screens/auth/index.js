@@ -8,6 +8,10 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import { ValidationForm, ValidationComponent } from "react-native-validation";
 import gerelo from "../../assets/icon.png";
@@ -84,6 +88,7 @@ class Auth extends Component {
     }
     return match_login && match_pib;
   };
+
   updateCurrentUser = async (token) => {
     firebase.database().ref(`/users/${this.state.login}`).update({
       token: token,
@@ -98,6 +103,7 @@ class Auth extends Component {
     );
     await this.props._storeData(token);
   };
+
   createNewUser = async (login, pib, token) => {
     await firebase.database().ref(`/users/${login}`).set({
       pib: pib,
@@ -107,7 +113,9 @@ class Auth extends Component {
     this.props.navigation.navigate("Map");
     this.props._storeData(token);
   };
+
   static getDerivedStateFromError() {}
+
   render() {
     const { pib, login } = this.state;
     //spinner for no token   !this.props.auth.have_token
@@ -116,170 +124,178 @@ class Auth extends Component {
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     ) : (
-      <ValidationForm
-        ref={(ref) => {
-          this.form = ref;
-        }}
-        style={{ flex: 1 }}
-        onSubmit={() => {
-          this.props.setLastWritings(login);
-          this.createNewUser(login, pib, uuid());
-          Alert.alert(
-            "Успішно",
-            "Вітаємо з реєстрацією",
-            { cancelable: false }
-          );
-        }}
-        onError={() => {
-          return 0;
-        }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={{flex: 1}}
       >
-        <View
-          style={{
-            justifyContent: "center",
-            flexDirection: "column",
-            backgroundColor: "#04405a",
-            alignItems: "center",
-            // borderColor: "red",
-            // borderWidth: 2,
-            flex: 1,
-          }}
-        >
-          <Image
-            source={gerelo}
-            style={{ bottom: 50, width: 240, height: 240 }}
-          />
-          <View style={styles.input}>
-            <ValidationComponent
-              component={
-                <TextInput
-                  onChangeText={(value) => {
-                    this.setState({ login: value });
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ValidationForm
+            ref={(ref) => {
+              this.form = ref;
+            }}
+            form={{}}
+            style={{ flex: 1 }}
+            onSubmit={() => {
+              this.props.setLastWritings(login);
+              this.createNewUser(login, pib, uuid());
+              Alert.alert(
+                "Успішно",
+                "Вітаємо з реєстрацією",
+                { cancelable: false }
+              );
+            }}
+            onError={() => {
+              return 0;
+            }}
+          >
+            <View
+              style={{
+                justifyContent: "center",
+                flexDirection: "column",
+                backgroundColor: "#04405a",
+                alignItems: "center",
+                // borderColor: "red",
+                // borderWidth: 2,
+                flex: 1,
+              }}
+            >
+              <Image
+                source={gerelo}
+                style={{ bottom: 50, width: 240, height: 240 }}
+              />
+              <View style={styles.input}>
+                <ValidationComponent
+                  component={
+                    <TextInput
+                      onChangeText={(value) => {
+                        this.setState({ login: value });
+                      }}
+                      onTouchStart={() => this.setState({ is_valid: false })}
+                      multiline={true}
+                      numberOfLines={1}
+                      value={this.state.login}
+                      placeholder={"Введіть логін"}
+                      textAlignVertical={"top"}
+                      style={{ padding: 10, paddingBottom: 5 }}
+                      onFocus={() => {
+                        this.setState({ activeDesc: true });
+                      }}
+                      onBlur={() => {
+                        this.setState({ activeDesc: false });
+                      }}
+                    />
+                  }
+                  errorMessageStyle={{
+                    color: "red",
+                    position: "absolute",
                   }}
-                  onTouchStart={() => this.setState({ is_valid: false })}
-                  multiline={true}
-                  numberOfLines={1}
-                  value={this.state.login}
-                  placeholder={"Введіть логін"}
-                  textAlignVertical={"top"}
-                  style={{ padding: 10, paddingBottom: 5 }}
-                  onFocus={() => {
-                    this.setState({ activeDesc: true });
+                  validators={[
+                    "required",
+                    "minStringLength:4",
+                    "maxStringLength:30",
+                  ]}
+                  errorMessages={[
+                    "*Заповнити обов'язково",
+                    "мінамільна довжина ніку 4 символів",
+                    "максимальна довжина ніку 30 символів",
+                  ]}
+                ></ValidationComponent>
+              </View>
+              {!this.state.is_valid ? null : (
+                <Text
+                  style={{ color: "red", position: "absolute", top: 30, left: 20 }}
+                >
+                  Ваш логін не чи піб не унікальні, якщо ви хочете просто ввійти,
+                  введіть коректні данні
+                </Text>
+              )}
+              <ValidationComponent
+                style={styles.input}
+                component={
+                  <TextInput
+                    onChangeText={(value) => {
+                      this.setState({ pib: value });
+                    }}
+                    multiline={true}
+                    numberOfLines={1}
+                    value={this.state.pib}
+                    placeholder={"Прізвище Імя по батькові"}
+                    textAlignVertical={"top"}
+                    style={{ padding: 10, paddingBottom: 5 }}
+                    onFocus={() => {
+                      this.setState({ activeDesc: true });
+                    }}
+                    onBlur={() => {
+                      this.setState({ activeDesc: false });
+                    }}
+                  />
+                }
+                errorMessageStyle={{
+                  color: "red",
+                  position: "absolute",
+                }}
+                validators={["required", "minStringLength:4", "maxStringLength:30"]}
+                errorMessages={[
+                  "*Заповнити обов'язково",
+                  "мінамільна довжина імені 4 символів",
+                  "максимальна довжина імені 30 символів",
+                ]}
+              ></ValidationComponent>
+              <View style={{ top: 10 }}>
+                <Button
+                  title={"Зареєструватися"}
+                  buttonStyle={{
+                    top: 25,
+                    borderRadius: 20,
+                    backgroundColor: "#465880",
+                    borderColor: "#ced4da",
+                    borderWidth: 2,
                   }}
-                  onBlur={() => {
-                    this.setState({ activeDesc: false });
+                  onPress={() => {
+                    if (this.checkifUserExist()) {
+                      this.updateCurrentUser(uuid());
+                      // this.setState({ is_valid: true });
+                      return;
+                    } else {
+                      this.form.validate();
+                    }
                   }}
                 />
-              }
-              errorMessageStyle={{
-                color: "red",
+              </View>
+            </View>
+            <View
+              style={{
+                // borderColor: "orange",
+                // borderWidth: 2,
                 position: "absolute",
+                bottom: 0,
+                width: "100%",
               }}
-              validators={[
-                "required",
-                "minStringLength:8",
-                "maxStringLength:30",
-              ]}
-              errorMessages={[
-                "*Заповнити обов'язково",
-                "мінамільна довжина ніку 8 символів",
-                "максимальна довжина ніку 30 символів",
-              ]}
-            ></ValidationComponent>
-          </View>
-          {!this.state.is_valid ? null : (
-            <Text
-              style={{ color: "red", position: "absolute", top: 30, left: 20 }}
             >
-              Ваш логін не чи піб не унікальні, якщо ви хочете просто ввійти,
-              введіть коректні данні
-            </Text>
-          )}
-          <ValidationComponent
-            style={styles.input}
-            component={
-              <TextInput
-                onChangeText={(value) => {
-                  this.setState({ pib: value });
+              {/* <Button
+                title={"Подивитися що в базі - Додому"}
+                buttonStyle={{
+                  width: "90%",
+                  left: 20,
                 }}
-                multiline={true}
-                numberOfLines={1}
-                value={this.state.pib}
-                placeholder={"Прізвище Імя по батькові"}
-                textAlignVertical={"top"}
-                style={{ padding: 10, paddingBottom: 5 }}
-                onFocus={() => {
-                  this.setState({ activeDesc: true });
+                onPress={() => {
+                  this.props.navigation.navigate("Home");
                 }}
-                onBlur={() => {
-                  this.setState({ activeDesc: false });
+              /> */}
+              {/* <Button
+                title={"checkifExists"}
+                buttonStyle={{
+                  width: "90%",
+                  left: 20,
                 }}
-              />
-            }
-            errorMessageStyle={{
-              color: "red",
-              position: "absolute",
-            }}
-            validators={["required", "minStringLength:8", "maxStringLength:30"]}
-            errorMessages={[
-              "*Заповнити обов'язково",
-              "мінамільна довжина імені 8 символів",
-              "максимальна довжина імені 30 символів",
-            ]}
-          ></ValidationComponent>
-          <View style={{ top: 10 }}>
-            <Button
-              title={"Зареєструватися"}
-              buttonStyle={{
-                top: 25,
-                borderRadius: 20,
-                backgroundColor: "#465880",
-                borderColor: "#ced4da",
-                borderWidth: 2,
-              }}
-              onPress={() => {
-                if (this.checkifUserExist()) {
-                  this.updateCurrentUser(uuid());
-                  // this.setState({ is_valid: true });
-                  return;
-                } else {
-                  this.form.validate();
-                }
-              }}
-            />
-          </View>
-        </View>
-        <View
-          style={{
-            // borderColor: "orange",
-            // borderWidth: 2,
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-          }}
-        >
-          {/* <Button
-            title={"Подивитися що в базі - Додому"}
-            buttonStyle={{
-              width: "90%",
-              left: 20,
-            }}
-            onPress={() => {
-              this.props.navigation.navigate("Home");
-            }}
-          /> */}
-          {/* <Button
-            title={"checkifExists"}
-            buttonStyle={{
-              width: "90%",
-              left: 20,
-            }}
-            onPress={() => {
-              this.checkifUserExist();
-            }}
-          /> */}
-        </View>
-      </ValidationForm>
+                onPress={() => {
+                  this.checkifUserExist();
+                }}
+              /> */}
+            </View>
+          </ValidationForm>
+          </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 }

@@ -49,16 +49,20 @@ class Map extends Component {
 
   async componentDidMount() {
     if (this.props.auth.locations != {}) {
-      await this.setState({
+      this.setState({
         locations: Object.entries(this.props.auth.locations),
       });
     }
-    let location = await Location.getCurrentPositionAsync({});
 
-    this.setState({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
+    try {
+      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      this.setState({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    } catch (error) {
+      
+    }    
   }
 
   render() {
@@ -77,7 +81,7 @@ class Map extends Component {
               marker[1].coords.latitude,
               marker[1].coords.longitude
             ) <
-              this.state.radius / 1000 || this.state.radius == "All" ? (
+              this.state.radius / 1000 || this.state.radius == 1 ? (
               <Marker
                 style={{ zIndex: 999, position: "absolute" }}
                 key={index}
@@ -98,7 +102,7 @@ class Map extends Component {
           <MapView.Circle
             style={{ position: "absolute" }}
             center={this.state}
-            radius={this.state.radius||0}
+            radius={this.state.radius}
             strokeWidth={1}
             strokeColor="#3399ff"
             fillColor="rgba(32, 137, 220,0.2)"

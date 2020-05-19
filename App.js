@@ -61,8 +61,24 @@ class App extends React.Component {
   //   }
   // };
   getCurrentPosition = async () => {
-    const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-    store.dispatch(_getCurrentPosition(location));
+
+    try {
+      const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      store.dispatch(_getCurrentPosition(location));
+    } catch (error) {
+      store.dispatch(_getCurrentPosition({
+        "coords": {
+          "accuracy": 35.071998596191406,
+          "altitude": 240.70001220703125,
+          "heading": 0,
+          "latitude": 50.2427717,
+          "longitude": 28.7031313,
+          "speed": 0,
+        },
+        "mocked": false,
+        "timestamp": 1589830163204,
+      }));
+    }    
   };
   getLocations = async () => {
     await firebase
@@ -90,9 +106,13 @@ class App extends React.Component {
       if (value !== null) {
         store.dispatch(_retrieveData(value));
       } else {
-        store.dispatch(_storeData(value));
+        // store.dispatch(_storeData(value));
       }
-    } catch (error) {}
+      return;
+    } catch (error) {
+      return;
+
+    }
   };
 
   async componentDidMount() {

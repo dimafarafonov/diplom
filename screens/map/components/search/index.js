@@ -51,7 +51,7 @@ class Search extends Component {
         <Button
           title="All"
           color="blue"
-          onPress={() => this.props.searchAll('All', 1, 1)}
+          onPress={() => this.props.searchAll(1, 1, 1)}
         ></Button>
         <Button
           title="Clear"
