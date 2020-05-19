@@ -22,10 +22,8 @@ class Home extends Component {
         Alert.alert(
           "Останній записанйи користувач логін",
           `${pib}`,
-          [{ text: "OK", onPress: () => console.log("OK") }],
           { cancelable: false }
         );
-        console.log("New high score: " + JSON.stringify(pib));
       });
   };
 
@@ -90,7 +88,6 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-  // console.log("state Home", state);
   const { home, auth } = state;
   return { home, auth };
 };

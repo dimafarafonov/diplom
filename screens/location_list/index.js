@@ -45,7 +45,6 @@ class LocationList extends React.Component {
   isNoUsersLocations = () => {
     let count = 0;
     const { locations } = this.state;
-    // console.log("count");
     if (!count) {
       return (
         <View
@@ -127,7 +126,6 @@ class LocationList extends React.Component {
                         .ref("locations")
                         .on("value", (snapshot) => {
                           let locations = snapshot.val();
-                          console.log("locations", Object.entries(locations));
                           this.setState({
                             locations: Object.entries(locations),
                           });

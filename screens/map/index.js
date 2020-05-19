@@ -63,7 +63,6 @@ class Map extends Component {
 
   render() {
     const { locations, latitude, longitude } = this.state;
-    // console.log('this.props.auth.locations',this.props.auth.locations)
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -106,7 +105,6 @@ class Map extends Component {
             zIndex={9999}
           />
         </MapView>
-        {console.log("thi.state.radius", this.state.radius)}
         <Button
           title="Створити локацію"
           buttonStyle={{

@@ -19,7 +19,6 @@ class MiniMap extends Component {
 
   async componentDidMount() {
     let location = await Location.getCurrentPositionAsync({});
-    // console.log("app.js location", location);
     this.setState({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,

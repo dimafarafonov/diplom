@@ -53,7 +53,6 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-    // console.log("this.props.Auth", this.props.auth.have_token);
     if (this.props.auth.have_token) {
       const resetAction =  CommonActions.reset({
         index: 1,
@@ -83,7 +82,6 @@ class Auth extends Component {
         }
       });
     }
-    console.log("match_login");
     return match_login && match_pib;
   };
   updateCurrentUser = async (token) => {
@@ -96,7 +94,6 @@ class Auth extends Component {
     Alert.alert(
       "Успішно",
       "Ви успішно залогінились",
-      [{ text: "OK", onPress: () => console.log("OK") }],
       { cancelable: false }
     );
     await this.props._storeData(token);
@@ -112,7 +109,6 @@ class Auth extends Component {
   };
   static getDerivedStateFromError() {}
   render() {
-    // console.log('this.props._storeData(token)',this.props._storeData();
     const { pib, login } = this.state;
     //spinner for no token   !this.props.auth.have_token
     return !this.props.auth.have_token && !this.props.auth.position.coords ? (
@@ -131,7 +127,6 @@ class Auth extends Component {
           Alert.alert(
             "Успішно",
             "Вітаємо з реєстрацією",
-            [{ text: "OK", onPress: () => console.log("OK") }],
             { cancelable: false }
           );
         }}

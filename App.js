@@ -62,7 +62,6 @@ class App extends React.Component {
   // };
   getCurrentPosition = async () => {
     const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-    // console.log("app.js location", location);
     store.dispatch(_getCurrentPosition(location));
   };
   getLocations = async () => {
@@ -71,7 +70,6 @@ class App extends React.Component {
       .ref("locations")
       .on("value", (snapshot) => {
         let locations = snapshot.val();
-        // console.log('locations',locations)
         store.dispatch(_getLocations(locations));
       });
   };
@@ -88,7 +86,6 @@ class App extends React.Component {
   retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("UNIQUE");
-      console.log("Unique", value);
 
       if (value !== null) {
         store.dispatch(_retrieveData(value));
