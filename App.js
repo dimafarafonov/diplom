@@ -65,12 +65,13 @@ class App extends React.Component {
     // console.log("app.js location", location);
     store.dispatch(_getCurrentPosition(location));
   };
-  getLocations = () => {
-    firebase
+  getLocations = async () => {
+    await firebase
       .database()
       .ref("locations")
       .on("value", (snapshot) => {
-        const locations = snapshot.val();
+        let locations = snapshot.val();
+        // console.log('locations',locations)
         store.dispatch(_getLocations(locations));
       });
   };

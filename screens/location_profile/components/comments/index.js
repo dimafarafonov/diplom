@@ -45,15 +45,16 @@ class Comments extends React.Component {
     // });
     // this.setState({ username: value });
   }
-  createComment = () => {
+  createComment = async () => {
     if (!this.state.text) return;
     console.log("succes added fields in database");
-    firebase.database().ref(`/comments/${uuid()}`).set({
+    await firebase.database().ref(`/comments/${uuid()}`).set({
       message: this.state.text,
       user_id: this.state.user_id,
       location_id: this.state.location_id,
       username: this.state.username,
     });
+    await this.getComments();
     Alert.alert(
       "Успішно",
       "Ви створили новий коментар",
@@ -62,15 +63,15 @@ class Comments extends React.Component {
     );
   };
 
-  //   getComments = () => {
-  //     firebase
-  //       .database()
-  //       .ref("comments")
-  //       .on("value", (snapshot) => {
-  //         const comments = snapshot.val();
-  //         this.setState({ comments: comments });
-  //       });
-  //   };
+  getComments = () => {
+    firebase
+      .database()
+      .ref("comments")
+      .on("value", (snapshot) => {
+        const comments = snapshot.val();
+        this.setState({ comments: comments });
+      });
+  };
 
   render() {
     const { comments } = this.state;
@@ -84,10 +85,10 @@ class Comments extends React.Component {
               borderWidth: 1,
               borderRadius: 10,
               paddingLeft: 10,
-              borderColor:'lightgrey',
+              borderColor: "lightgrey",
               backgroundColor: "white",
-              width:'90%',
-              left:'5%'
+              width: "90%",
+              left: "5%",
             }}
             onChangeText={(text) => {
               this.setState({ text: text });
@@ -96,7 +97,7 @@ class Comments extends React.Component {
             placeholder={"Тут можна написати відгук"}
             multiline={true}
           />
-          <View style={{ position: "absolute", right: '6%', bottom: 2 }}>
+          <View style={{ position: "absolute", right: "6%", bottom: 2 }}>
             <Icon
               name="send"
               type="send"
@@ -118,22 +119,34 @@ class Comments extends React.Component {
                   <View
                     key={index}
                     style={{
-                      marginTop: 15,
+                      marginTop: 10,
+                      marginBottom:5,
                       backgroundColor: "lightgrey",
                       padding: 15,
-                      width:'90%',
-                      left:'5%',
-                      borderRadius:30
+                      width: "90%",
+                      left: "5%",
+                      borderRadius: 30,
                     }}
                   >
-                    <Image
-                      source={require("../../../../assets/nobody.jpg")}
-                      style={{ width: 50, height: 50, borderRadius: 50 }}
-                      resizeMode={"contain"}
-                    />
-                    <Text style={{ color: "green",fontWeight:'bold' }}>
-                      {key[1].username}:{" "}
-                      <Text style={{ color: "black" }}>{key[1].message}</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        source={require("../../../../assets/nobody.jpg")}
+                        style={{ width: 50, height: 50, borderRadius: 50 }}
+                        resizeMode={"contain"}
+                      />
+                      <Text
+                        style={{
+                          color: "green",
+                          fontWeight: "bold",
+                          left: 5,
+                          top: "10%",
+                        }}
+                      >
+                        {key[1].username}:{" "}
+                      </Text>
+                    </View>
+                    <Text style={{ color: "black", fontWeight: "bold" }}>
+                      {key[1].message}
                     </Text>
                   </View>
                 );

@@ -49,9 +49,14 @@ class Search extends Component {
           onPress={() => this.props.searchByRadius(10000, 0.5, 0.5)}
         ></Button>
         <Button
+          title="All"
+          color="blue"
+          onPress={() => this.props.searchAll('All', 1, 1)}
+        ></Button>
+        <Button
           title="Clear"
           color="lightgrey"
-          onPress={() => this.props.searchByRadius(0,0.01,0.01)}
+          onPress={() => this.props.searchByRadius(0, 0.01, 0.01)}
         ></Button>
       </View>
     );

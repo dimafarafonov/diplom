@@ -15,8 +15,8 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: 37.78825||this.props.auth.position.coords.latitude,
-      longitude: -122.4324||this.props.auth.position.coords.longitude,
+      latitude: 37.78825 || this.props.auth.position.coords.latitude,
+      longitude: -122.4324 || this.props.auth.position.coords.longitude,
       latitudeDelta: 0.1,
       longitudeDelta: 0.1,
       locations: [],
@@ -27,6 +27,9 @@ class Map extends Component {
     return deg * (Math.PI / 180);
   }
   searchByRadius = (radius, latitudeDelta, longitudeDelta) => {
+    this.setState({ radius, latitudeDelta, longitudeDelta });
+  };
+  searchAll = (radius, latitudeDelta, longitudeDelta) => {
     this.setState({ radius, latitudeDelta, longitudeDelta });
   };
   getDistance(lat1, lon1, lat2, lon2) {
@@ -60,7 +63,7 @@ class Map extends Component {
 
   render() {
     const { locations, latitude, longitude } = this.state;
-
+    // console.log('this.props.auth.locations',this.props.auth.locations)
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -75,7 +78,7 @@ class Map extends Component {
               marker[1].coords.latitude,
               marker[1].coords.longitude
             ) <
-            this.state.radius / 1000 ? (
+              this.state.radius / 1000 || this.state.radius == "All" ? (
               <Marker
                 style={{ zIndex: 999, position: "absolute" }}
                 key={index}
@@ -96,7 +99,7 @@ class Map extends Component {
           <MapView.Circle
             style={{ position: "absolute" }}
             center={this.state}
-            radius={this.state.radius}
+            radius={this.state.radius||0}
             strokeWidth={1}
             strokeColor="#3399ff"
             fillColor="rgba(32, 137, 220,0.2)"
@@ -108,39 +111,42 @@ class Map extends Component {
           title="Створити локацію"
           buttonStyle={{
             position: "absolute",
-            left:125,
+            left: 125,
             top: 5,
             borderRadius: 50,
-            paddingTop:5,
-            paddingBottom:10,
-            paddingLeft:15,
-            paddingRight:15,
-            backgroundColor:'green'
+            paddingTop: 5,
+            paddingBottom: 10,
+            paddingLeft: 15,
+            paddingRight: 15,
+            backgroundColor: "green",
           }}
           onPress={() => {
             // this.props.changeProps("from Map"),
-              this.props.navigation.navigate("LocationCreate");
+            this.props.navigation.navigate("LocationCreate");
           }}
         ></Button>
         <Button
           title="Мої локації"
           buttonStyle={{
             position: "absolute",
-            left:5,
-            top:5,
+            left: 5,
+            top: 5,
             borderRadius: 50,
-            paddingTop:5,
-            paddingBottom:10,
-            paddingLeft:15,
-            paddingRight:15,
+            paddingTop: 5,
+            paddingBottom: 10,
+            paddingLeft: 15,
+            paddingRight: 15,
           }}
           onPress={() => {
             // this.props.changeProps("from Map"),
-              this.props.navigation.navigate("LocationList");
+            this.props.navigation.navigate("LocationList");
           }}
           color="orange"
         ></Button>
-        <Seacrh searchByRadius={this.searchByRadius} />
+        <Seacrh
+          searchByRadius={this.searchByRadius}
+          searchAll={this.searchAll}
+        />
       </View>
     );
   }

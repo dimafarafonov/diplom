@@ -2,7 +2,7 @@ const default_state = {
   have_token: false,
   locations: [],
   position: {},
-  comments: [],
+  comments: {},
 };
 
 export default function (state = default_state, action) {
