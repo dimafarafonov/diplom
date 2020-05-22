@@ -59,18 +59,19 @@ class Auth extends Component {
       });
   }
   componentDidUpdate() {
-    console.log("this.propsauthtokern", this.props.auth.have_token);
-    // if (this.props.auth.have_token) {
-    //   const resetAction =  CommonActions.reset({
-    //     index: 1,
-    //     routes: [
-    //       { name: 'Map' },
-    //     ],
-    //   })
-    //   this.props.navigation.dispatch(resetAction);
-    // } else {
-    //   this.props.navigation.navigate("Auth");
-    // }
+    // console.log("this.propsauthtokern", this.props.auth.have_token);
+    // AsyncStorage.removeItem("UNIQUE")
+    if (this.props.auth.have_token) {
+      const resetAction =  CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: 'Map' },
+        ],
+      })
+      this.props.navigation.dispatch(resetAction);
+    } else {
+      this.props.navigation.navigate("Auth");
+    }
   }
 
   checkifUserExist = () => {

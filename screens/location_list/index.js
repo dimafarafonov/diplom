@@ -85,8 +85,6 @@ class LocationList extends React.Component {
           {locations.map(
             (marker, index) =>
               marker[1].user_id == this.state.user_id && (
-                console.log('marker[]',marker[1].user_id),
-                console.log('this.state.user_id',this.state.user_id),
                 <TouchableOpacity
                   key={index}
                   style={styles.item}
@@ -114,7 +112,7 @@ class LocationList extends React.Component {
                   <TouchableOpacity
                     style={{
                       position: "absolute",
-                      right: 5,
+                      right: 10,
                       bottom: 5,
                       zIndex: 9999,
                     }}
@@ -137,6 +135,22 @@ class LocationList extends React.Component {
                   >
                     <FontAwesome name="trash" size={32} color="black" />
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      right: 5,
+                      bottom: 40,
+                      zIndex: 9999,
+                    }}
+                    onPress={() =>
+                      this.props.navigation.navigate("LocationEdit", {
+                        location_id: marker[1].location_id,
+                        location_title: marker[1].title,
+                      })
+                    }
+                  >
+                    <FontAwesome name="edit" size={32} color="black" />
+                  </TouchableOpacity>
                 </TouchableOpacity>
               )
           )}
@@ -153,7 +167,7 @@ class LocationList extends React.Component {
         <Button
           containerStyle={{ marginHorizontal: 20, marginBottom: 20 }}
           title="Назад"
-          buttonStyle={{backgroundColor: 'black'}}
+          buttonStyle={{ backgroundColor: "black" }}
           onPress={() => {
             // this.props.changeProps("from Map"),
             this.props.navigation.goBack();

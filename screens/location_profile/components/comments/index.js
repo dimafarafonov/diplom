@@ -134,7 +134,7 @@ class Comments extends React.Component {
                         style={{ width: 50, height: 50, borderRadius: 50 }}
                         resizeMode={"contain"}
                       />
-                      <View style={{marginLeft: 10}}>
+                      <View style={{marginLeft: 10,width:'83%'}}>
                         <Text
                           style={{
                             color,
@@ -143,7 +143,7 @@ class Comments extends React.Component {
                         >
                           {key[1].username}:{" "}
                         </Text>
-                        <Text style={{ color: "#4c4c4c", fontWeight: "bold" }}>
+                        <Text style={{ color: "#4c4c4c", fontWeight: "bold"}}>
                           {key[1].message}
                         </Text>
                       </View>

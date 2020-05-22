@@ -6,6 +6,7 @@ import Auth from "./screens/auth";
 import LocationCreate from "./screens/location_create";
 import LocationList from "./screens/location_list";
 import LocationProfile from "./screens/location_profile";
+import LocationEdit from "./screens/location_list/components/location_edit";
 import firebaseConfig from "./config/firebase";
 import reducer from "./reducers/index.js";
 import * as Permissions from "expo-permissions";
@@ -19,7 +20,7 @@ import {
   _removeData,
   _getLocations,
   _getCurrentPosition,
-  _getComments
+  _getComments,
 } from "./reducers/actions";
 import { Provider } from "react-redux";
 
@@ -33,6 +34,7 @@ const Root = createCompatNavigatorFactory(createStackNavigator)(
     Auth: Auth,
     Home: Home,
     Map: Map,
+    LocationEdit: LocationEdit,
     LocationCreate: LocationCreate,
     LocationList: LocationList,
     LocationProfile: LocationProfile,
@@ -61,27 +63,30 @@ class App extends React.Component {
   //   }
   // };
   getCurrentPosition = async () => {
-
     try {
-      const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      const location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
       store.dispatch(_getCurrentPosition(location));
     } catch (error) {
-      store.dispatch(_getCurrentPosition({
-        "coords": {
-          "accuracy": 35.071998596191406,
-          "altitude": 240.70001220703125,
-          "heading": 0,
-          "latitude": 50.2427717,
-          "longitude": 28.7031313,
-          "speed": 0,
-        },
-        "mocked": false,
-        "timestamp": 1589830163204,
-      }));
+      store.dispatch(
+        _getCurrentPosition({
+          coords: {
+            accuracy: 35.071998596191406,
+            altitude: 240.70001220703125,
+            heading: 0,
+            latitude: 50.2427717,
+            longitude: 28.7031313,
+            speed: 0,
+          },
+          mocked: false,
+          timestamp: 1589830163204,
+        })
+      );
     }
   };
-  getLocations =  () => {
-     firebase
+  getLocations = () => {
+    firebase
       .database()
       .ref("locations")
       .on("value", (snapshot) => {
@@ -106,18 +111,17 @@ class App extends React.Component {
       if (value !== null) {
         store.dispatch(_retrieveData(value));
       } else {
-        console.log('this is works that means user have no')
+        console.log("this is works that means user have no");
         // store.dispatch(_storeData(value));
       }
       return;
     } catch (error) {
       return;
-
     }
   };
 
   async componentDidMount() {
-    await this.getComments()
+    await this.getComments();
     await this.getLocations();
     await this.retrieveData();
     await this._getLocationAsync();
