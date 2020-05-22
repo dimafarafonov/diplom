@@ -35,162 +35,143 @@ class LocationEdit extends React.Component {
       water_rate: "",
       labs_results: "",
       togoal_distance: "",
-      water_speed: "3",
+      water_speed: "",
       if_queue: "",
       checked: "Ні",
     };
-  }
-  async componentDidMount() {
-    console.log("this.prop", this.props.navigation);
-    this.getPermissionAsync();
-    this.setState({ token: await AsyncStorage.getItem("UNIQUE") });
-    const { users } = this.state;
-    if (users != null) {
-      Object.entries(users).filter((key, index) => {
-        if (key[1].token == this.state.token)
-          this.setState({ user_id: key[1].id });
-      });
-    }
   }
 
   render() {
     let { image } = this.state;
     let { location_title } = this.props.navigation.state.params;
     return (
-      <View style={{}}>
-        <ValidationForm
-          ref={(ref) => {
-            this.form = ref;
-          }}
-          form={{}}
-          //   style={{ flexGrow: 1 }}
-          onSubmit={() => {
-            this.props.navigation.push("Map");
-            Alert.alert(
-              "Успішно",
-              "Ви відредагували свою локацію",
-              [
-                {
-                  text: "OK",
-                  onPress: () => {
-                    firebase
-                      .database()
-                      .ref(`/locations/${location_title}`)
-                      .update({
-                        labs_results: this.state.labs_results,
-                        water_speed: this.state.water_speed,
-                        if_queue: this.state.checked,
-                      });
-                  },
+      //   <View style={{height:height,width:width}}>
+      <ValidationForm
+        ref={(ref) => {
+          this.form = ref;
+        }}
+        form={{}}
+        style={{ flex:1,backgroundColor:'grey' }}
+        onSubmit={() => {
+          this.props.navigation.push("Map");
+          Alert.alert(
+            "Успішно",
+            "Ви відредагували свою локацію",
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                  firebase
+                    .database()
+                    .ref(`/locations/${location_title}`)
+                    .update({
+                      labs_results: this.state.labs_results,
+                      water_speed: this.state.water_speed,
+                      if_queue: this.state.checked,
+                    });
                 },
-              ],
-              { cancelable: false }
-            );
-          }}
-          onError={(error) => {
-            return 0;
+              },
+            ],
+            { cancelable: false }
+          );
+        }}
+        onError={(error) => {
+          return 0;
+        }}
+      >
+        {/* <ScrollView> */}
+        {/* <MiniMap /> */}
+        <View
+          style={{
+            justifyContent: "center",
+            flexDirection: "column",
+            backgroundColor: "grey",
+            alignItems: "center",
+            // borderColor: "red",
+            // borderWidth: 2,
+            // flex: 1,
           }}
         >
-          <ScrollView>
-            {/* <MiniMap /> */}
-            <View
-              style={{
-                justifyContent: "center",
-                flexDirection: "column",
-                backgroundColor: "grey",
-                alignItems: "center",
-                // borderColor: "red",
-                // borderWidth: 2,
-                flex: 1,
-              }}
-            >
-              <Text style={{ color: "white", fontSize: 20, bottom: 0 }}>
-                Редагування локації
-              </Text>
-
-              {/* {!this.state.is_valid ? null : (
-                <Text style={{ color: "red", position: "absolute" }}>
-                  Ваш логін не унікальний
-                </Text>
-              )} */}
-
-              <ValidationComponent
-                style={styles.input}
-                component={
-                  <TextInput
-                    onChangeText={(value) => {
-                      this.setState({ labs_results: value });
-                    }}
-                    multiline={true}
-                    numberOfLines={4}
-                    value={this.state.labs_results}
-                    placeholder={"Результати лабораторних досліджень"}
-                    textAlignVertical={"top"}
-                    style={{ padding: 10, paddingBottom: 5 }}
-                    onFocus={() => {
-                      this.setState({ activeDesc: true });
-                    }}
-                    onBlur={() => {
-                      this.setState({ activeDesc: false });
-                    }}
-                  />
-                }
-                errorMessageStyle={{
-                  color: "red",
-                  position: "absolute",
+          <Text style={{ color: "white", fontSize: 20, bottom: 0 }}>
+            Редагування локації
+          </Text>
+          <ValidationComponent
+            style={styles.input}
+            component={
+              <TextInput
+                onChangeText={(value) => {
+                  this.setState({ labs_results: value });
                 }}
-                validators={[
-                  "required",
-                  "minStringLength:10",
-                  "maxStringLength:100",
-                ]}
-                errorMessages={[
-                  "*Заповнити обов'язково ",
-                  "Мінімальна довжина 30 символів",
-                  "Максимальна довжина 100 символів",
-                ]}
-              ></ValidationComponent>
-
-              <ValidationComponent
-                style={styles.input}
-                component={
-                  <TextInput
-                    onChangeText={(value) => {
-                      this.setState({ water_speed: value });
-                    }}
-                    multiline={true}
-                    numberOfLines={1}
-                    value={this.state.water_speed}
-                    placeholder={"Швидкість потоку води л/с"}
-                    textAlignVertical={"top"}
-                    style={{ padding: 10, paddingBottom: 5 }}
-                    onFocus={() => {
-                      this.setState({ activeDesc: true });
-                    }}
-                    onBlur={() => {
-                      this.setState({ activeDesc: false });
-                    }}
-                  />
-                }
-                errorMessageStyle={{
-                  color: "red",
-                  position: "absolute",
+                multiline={true}
+                numberOfLines={4}
+                value={this.state.labs_results}
+                placeholder={"Результати лабораторних досліджень"}
+                textAlignVertical={"top"}
+                style={{ padding: 10, paddingBottom: 5 }}
+                onFocus={() => {
+                  this.setState({ activeDesc: true });
                 }}
-                validators={["required", "minFloat:0.1", "maxFloat:50"]}
-                errorMessages={[
-                  "*Заповнити обов'язково  ",
-                  "Мінімальна швидкість 0.1",
-                  "Максимальна швидкість 75",
-                ]}
-              ></ValidationComponent>
-              {/* <ValidationComponent
+                onBlur={() => {
+                  this.setState({ activeDesc: false });
+                }}
+              />
+            }
+            errorMessageStyle={{
+              color: "red",
+              position: "absolute",
+            }}
+            validators={[
+              "required",
+              "minStringLength:10",
+              "maxStringLength:100",
+            ]}
+            errorMessages={[
+              "*Заповнити обов'язково ",
+              "Мінімальна довжина 30 символів",
+              "Максимальна довжина 100 символів",
+            ]}
+          ></ValidationComponent>
+
+          <ValidationComponent
+            style={styles.input}
+            component={
+              <TextInput
+                onChangeText={(value) => {
+                  this.setState({ water_speed: value });
+                }}
+                multiline={true}
+                numberOfLines={1}
+                value={this.state.water_speed}
+                placeholder={"Швидкість потоку води л/с"}
+                textAlignVertical={"top"}
+                style={{ padding: 10, paddingBottom: 5 }}
+                onFocus={() => {
+                  this.setState({ activeDesc: true });
+                }}
+                onBlur={() => {
+                  this.setState({ activeDesc: false });
+                }}
+              />
+            }
+            errorMessageStyle={{
+              color: "red",
+              position: "absolute",
+            }}
+            validators={["required", "minFloat:0.1", "maxFloat:50"]}
+            errorMessages={[
+              "*Заповнити обов'язково  ",
+              "Мінімальна швидкість 0.1",
+              "Максимальна швидкість 75",
+            ]}
+          ></ValidationComponent>
+          {/* <ValidationComponent
                 // style={styles.input}
                 component={
                  <View style={{height:'100%'}}></View>
                 }
 
               ></ValidationComponent> */}
-              {/* <ValidationComponent
+          {/* <ValidationComponent
                 style={{ bottom: 10 }}
                 component={
 
@@ -211,76 +192,72 @@ class LocationEdit extends React.Component {
                       this.setState({ activeDesc: false });
                     }}
                   /> */}
-              <View style={{ bottom: 15 }}>
-                <Text
-                  style={{
-                    padding: 10,
-                    backgroundColor: "#465880",
-                    width: "100%",
-                    borderRadius: 5,
-                    color: "white",
-                    top: 10,
-                  }}
-                >
-                  Наявність черги до джерела
-                </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    top: 10,
-                  }}
-                >
-                  <Text>Так</Text>
-                  <RadioButton
-                    value="Так"
-                    status={
-                      this.state.checked === "Так" ? "checked" : "unchecked"
-                    }
-                    onPress={() => {
-                      this.setState({ checked: "Так" });
-                    }}
-                  />
-                  <Text>Ні</Text>
-                  <RadioButton
-                    value="Ні"
-                    status={
-                      this.state.checked === "Ні" ? "checked" : "unchecked"
-                    }
-                    onPress={() => {
-                      this.setState({ checked: "Ні" });
-                    }}
-                  />
-                </View>
-              </View>
-              {/* ></ValidationComponent> */}
-
-              {/* <ValidationComponent
-                component={ */}
-              <View style={{ width: "90%", marginTop: 20, marginBottom: 10 }}>
-                <Button
-                  title={"Редагувати"}
-                  onPress={() => {
-                    this.form.validate();
-                  }}
-                />
-                <Button
-                  title={"Назад"}
-                  containerStyle={{ marginTop: 10 }}
-                  buttonStyle={{ backgroundColor: "black" }}
-                  onPress={() => {
-                    this.props.navigation.goBack();
-                  }}
-                />
-              </View>
-
-              {/* }
-              ></ValidationComponent> */}
+          <View style={{ bottom: 15 }}>
+            <Text
+              style={{
+                padding: 10,
+                backgroundColor: "#465880",
+                width: "100%",
+                borderRadius: 5,
+                color: "white",
+                top: 10,
+              }}
+            >
+              Наявність черги до джерела
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                top: 10,
+              }}
+            >
+              <Text>Так</Text>
+              <RadioButton
+                value="Так"
+                status={this.state.checked === "Так" ? "checked" : "unchecked"}
+                onPress={() => {
+                  this.setState({ checked: "Так" });
+                }}
+              />
+              <Text>Ні</Text>
+              <RadioButton
+                value="Ні"
+                status={this.state.checked === "Ні" ? "checked" : "unchecked"}
+                onPress={() => {
+                  this.setState({ checked: "Ні" });
+                }}
+              />
             </View>
-          </ScrollView>
-        </ValidationForm>
-      </View>
+          </View>
+          {/* ></ValidationComponent> */}
+
+          {/* <ValidationComponent
+                component={ */}
+          <View style={{ width: "90%", marginTop: 20, marginBottom: 10 }}>
+            <Button
+              title={"Редагувати"}
+              onPress={() => {
+                this.form.validate();
+              }}
+            />
+            <Button
+              title={"Назад"}
+              containerStyle={{ marginTop: 10 }}
+              buttonStyle={{ backgroundColor: "black" }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            />
+          </View>
+
+          {/* }
+              ></ValidationComponent> */}
+        </View>
+        {/* </ScrollView> */}
+      </ValidationForm>
+      //   </View>
     );
   }
 }
