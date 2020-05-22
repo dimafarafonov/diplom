@@ -112,7 +112,7 @@ class Auth extends Component {
   };
   static getDerivedStateFromError() {}
   render() {
-    // console.log('this.props._storeData(token)',this.props._storeData();
+     console.log('this.props._storeData(token)',this.props.auth.have_token);
     const { pib, login } = this.state;
     //spinner for no token   !this.props.auth.have_token
     return !this.props.auth.have_token && !this.props.auth.position.coords ? (

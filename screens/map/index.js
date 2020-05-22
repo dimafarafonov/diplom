@@ -78,7 +78,7 @@ class Map extends Component {
               marker[1].coords.latitude,
               marker[1].coords.longitude
             ) <
-              this.state.radius / 1000 || this.state.radius == "All" ? (
+              this.state.radius / 1000 || this.state.radius == 1 ? (
               <Marker
                 style={{ zIndex: 999, position: "absolute" }}
                 key={index}
@@ -99,7 +99,7 @@ class Map extends Component {
           <MapView.Circle
             style={{ position: "absolute" }}
             center={this.state}
-            radius={this.state.radius||0}
+            radius={this.state.radius}
             strokeWidth={1}
             strokeColor="#3399ff"
             fillColor="rgba(32, 137, 220,0.2)"

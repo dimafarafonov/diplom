@@ -80,7 +80,7 @@ class LocationCreate extends React.Component {
         this.setState({ image: img });
       }
 
-      
+
       // this.setState({ image: result.base64 });
     } catch (E) {
     }
@@ -465,7 +465,7 @@ class LocationCreate extends React.Component {
               <View style={{ width: "90%", marginTop: 20, marginBottom: 10}}>
                 <Button
                   title={"Створити"}
-                  
+
                   onPress={() => {
                     this.form.validate();
                   }}
@@ -479,7 +479,7 @@ class LocationCreate extends React.Component {
                   }}
                 />
               </View>
-              
+
               {/* }
               ></ValidationComponent> */}
             </View>
