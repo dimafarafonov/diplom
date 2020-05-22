@@ -8,13 +8,13 @@ export function _removeData() {
   }
 }
 
-export async  function _storeData (token) {
-  try {
-    AsyncStorage.setItem("UNIQUE", token);
-  } catch (error) {
-    // Error saving data
-  }
-}
+// export   function _storeData (token) {
+//   try {
+//     AsyncStorage.setItem("UNIQUE", token);
+//   } catch (error) {
+//     // Error saving data
+//   }
+// }
 export const _retrieveData = (value) => ({
   type: "RETRIEVE_DATA",
   payload: value,

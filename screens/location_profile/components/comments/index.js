@@ -14,6 +14,10 @@ import { Icon, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { withNavigation } from "@react-navigation/compat";
 import uuid from "uuid-random";
+
+
+const color = '#2089DC';
+
 class Comments extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +33,6 @@ class Comments extends React.Component {
   async componentDidMount() {
     const { users, user_id } = this.state;
 
-    // console.log('this.props.have_token',this.props.auth.have_token)
     if (users != null) {
       Object.entries(users).filter((key, index) => {
         if (key[1].token == this.state.token)
@@ -41,13 +44,11 @@ class Comments extends React.Component {
     //   if (users[val].id == user_id) {
     //     value = val;
     //   }
-    //   console.log("value", value);
     // });
     // this.setState({ username: value });
   }
   createComment = async () => {
     if (!this.state.text) return;
-    console.log("succes added fields in database");
     await firebase.database().ref(`/comments/${uuid()}`).set({
       message: this.state.text,
       user_id: this.state.user_id,
@@ -58,7 +59,6 @@ class Comments extends React.Component {
     Alert.alert(
       "Успішно",
       "Ви створили новий коментар",
-      [{ text: "OK", onPress: () => console.log("OK") }],
       { cancelable: false }
     );
   };
@@ -134,20 +134,20 @@ class Comments extends React.Component {
                         style={{ width: 50, height: 50, borderRadius: 50 }}
                         resizeMode={"contain"}
                       />
-                      <Text
-                        style={{
-                          color: "green",
-                          fontWeight: "bold",
-                          left: 5,
-                          top: "10%",
-                        }}
-                      >
-                        {key[1].username}:{" "}
-                      </Text>
+                      <View style={{marginLeft: 10}}>
+                        <Text
+                          style={{
+                            color,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {key[1].username}:{" "}
+                        </Text>
+                        <Text style={{ color: "#4c4c4c", fontWeight: "bold" }}>
+                          {key[1].message}
+                        </Text>
+                      </View>
                     </View>
-                    <Text style={{ color: "black", fontWeight: "bold" }}>
-                      {key[1].message}
-                    </Text>
                   </View>
                 );
               }

@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import MyText from "./components/custom_text";
 import { withNavigation } from "@react-navigation/compat";
 import { ScrollView } from "react-native-gesture-handler";
-
+import { AntDesign } from '@expo/vector-icons';
 const color = '#2089DC';
 
 
@@ -54,6 +54,9 @@ class LocationProfile extends React.Component {
 
     return (
         <ScrollView style={styles.container}>
+            <TouchableOpacity onPress={() => {this.props.navigation.goBack()}} style={{alignItems: 'center', justifyContent: 'center', backgroundColor: color, width: 50, height: 50, borderRadius: 25, top: 10, left: 10, position: 'absolute', zIndex: 2}}>
+              <AntDesign name="arrowleft" size={28} color="white" />
+            </TouchableOpacity>
             <Image
               source={{ uri: img }}
               style={{ width: '100%', height: 200}}

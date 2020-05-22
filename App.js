@@ -61,9 +61,24 @@ class App extends React.Component {
   //   }
   // };
   getCurrentPosition = async () => {
-    const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-    // console.log("app.js location", location);
-    store.dispatch(_getCurrentPosition(location));
+
+    try {
+      const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      store.dispatch(_getCurrentPosition(location));
+    } catch (error) {
+      store.dispatch(_getCurrentPosition({
+        "coords": {
+          "accuracy": 35.071998596191406,
+          "altitude": 240.70001220703125,
+          "heading": 0,
+          "latitude": 50.2427717,
+          "longitude": 28.7031313,
+          "speed": 0,
+        },
+        "mocked": false,
+        "timestamp": 1589830163204,
+      }));
+    }
   };
   getLocations =  () => {
      firebase
@@ -71,7 +86,6 @@ class App extends React.Component {
       .ref("locations")
       .on("value", (snapshot) => {
         let locations = snapshot.val();
-        // console.log('locations',locations)
         store.dispatch(_getLocations(locations));
       });
   };
@@ -88,14 +102,18 @@ class App extends React.Component {
   retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem("UNIQUE");
-      console.log("Unique", value);
 
       if (value !== null) {
         store.dispatch(_retrieveData(value));
       } else {
-        store.dispatch(_storeData(value));
+        console.log('this is works that means user have no')
+        // store.dispatch(_storeData(value));
       }
-    } catch (error) {}
+      return;
+    } catch (error) {
+      return;
+
+    }
   };
 
   async componentDidMount() {

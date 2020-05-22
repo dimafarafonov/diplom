@@ -45,7 +45,6 @@ class LocationList extends React.Component {
   isNoUsersLocations = () => {
     let count = 0;
     const { locations } = this.state;
-    // console.log("count");
     if (!count) {
       return (
         <View
@@ -86,6 +85,8 @@ class LocationList extends React.Component {
           {locations.map(
             (marker, index) =>
               marker[1].user_id == this.state.user_id && (
+                console.log('marker[]',marker[1].user_id),
+                console.log('this.state.user_id',this.state.user_id),
                 <TouchableOpacity
                   key={index}
                   style={styles.item}
@@ -127,7 +128,6 @@ class LocationList extends React.Component {
                         .ref("locations")
                         .on("value", (snapshot) => {
                           let locations = snapshot.val();
-                          console.log("locations", Object.entries(locations));
                           this.setState({
                             locations: Object.entries(locations),
                           });

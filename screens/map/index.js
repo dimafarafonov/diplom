@@ -49,21 +49,24 @@ class Map extends Component {
 
   async componentDidMount() {
     if (this.props.auth.locations != {}) {
-      await this.setState({
+      this.setState({
         locations: Object.entries(this.props.auth.locations),
       });
     }
-    let location = await Location.getCurrentPositionAsync({});
 
-    this.setState({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
+    try {
+      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      this.setState({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    } catch (error) {
+      
+    }    
   }
 
   render() {
     const { locations, latitude, longitude } = this.state;
-    // console.log('this.props.auth.locations',this.props.auth.locations)
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -106,7 +109,6 @@ class Map extends Component {
             zIndex={9999}
           />
         </MapView>
-        {console.log("thi.state.radius", this.state.radius)}
         <Button
           title="Створити локацію"
           buttonStyle={{

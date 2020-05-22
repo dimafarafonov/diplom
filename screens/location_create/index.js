@@ -93,6 +93,7 @@ class LocationCreate extends React.Component {
           ref={(ref) => {
             this.form = ref;
           }}
+          form={{}}
           style={{ height: "100%", top: 0, position: "relative" }}
           onSubmit={() => {
             this.props.navigation.push("Map");
