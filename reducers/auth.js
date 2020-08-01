@@ -4,7 +4,6 @@ const default_state = {
   position: {},
   comments: {},
 };
-
 export default function (state = default_state, action) {
   switch (action.type) {
     case "RETRIEVE_DATA": {

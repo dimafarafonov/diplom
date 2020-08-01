@@ -25,7 +25,7 @@ class MiniMap extends Component {
         longitude: location.coords.longitude,
       });
     } catch (error) {
-      
+
     }
   }
 
@@ -63,7 +63,7 @@ class MiniMap extends Component {
           }}
         >
           <Text style={{ textAlign: "center" }}>
-            Позначте місце знаходження джерела
+            Позначте місце знаходження авто
           </Text>
         </View>
       </View>

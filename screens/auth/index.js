@@ -37,6 +37,7 @@ class Auth extends Component {
     this.state = {
       login: "",
       pib: "",
+      tel:"",
       loading: true,
       users: [],
       is_valid: false,
@@ -62,12 +63,10 @@ class Auth extends Component {
     // console.log("this.propsauthtokern", this.props.auth.have_token);
     // AsyncStorage.removeItem("UNIQUE")
     if (this.props.auth.have_token) {
-      const resetAction =  CommonActions.reset({
+      const resetAction = CommonActions.reset({
         index: 1,
-        routes: [
-          { name: 'Map' },
-        ],
-      })
+        routes: [{ name: "Map" }],
+      });
       this.props.navigation.dispatch(resetAction);
     } else {
       this.props.navigation.navigate("Auth");
@@ -108,11 +107,12 @@ class Auth extends Component {
     );
     AsyncStorage.setItem("UNIQUE", token);
   };
-  createNewUser = async (login, pib, token) => {
+  createNewUser = async (login, pib, token,tel) => {
     await firebase.database().ref(`/users/${login}`).set({
       pib: pib,
       id: uuid(),
       token: token,
+      tel:tel
     });
     this.props.navigation.navigate("Map");
     AsyncStorage.setItem("UNIQUE", token);
@@ -122,7 +122,7 @@ class Auth extends Component {
   static getDerivedStateFromError() {}
 
   render() {
-    const { pib, login } = this.state;
+    const { pib, login,tel } = this.state;
     //spinner for no token   !this.props.auth.have_token
     return !this.props.auth.have_token && !this.props.auth.position.coords ? (
       <View style={[styles.container, styles.horizontal]}>
@@ -133,7 +133,7 @@ class Auth extends Component {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
           <ValidationForm
             ref={(ref) => {
               this.form = ref;
@@ -142,7 +142,7 @@ class Auth extends Component {
             style={{ flex: 1 }}
             onSubmit={() => {
               this.props.setLastWritings(login);
-              this.createNewUser(login, pib, uuid());
+              this.createNewUser(login, pib, uuid(),tel);
               Alert.alert(
                 "Успішно",
                 "Вітаємо з реєстрацією",
@@ -254,6 +254,42 @@ class Auth extends Component {
                   "*Заповнити обов'язково",
                   "мінамільна довжина імені 4 символів",
                   "максимальна довжина імені 30 символів",
+                ]}
+              ></ValidationComponent>
+              <ValidationComponent
+                style={styles.input}
+                component={
+                  <TextInput
+                    onChangeText={(value) => {
+                      this.setState({ tel: value });
+                    }}
+                    multiline={true}
+                    numberOfLines={1}
+                    value={this.state.tel}
+                    placeholder={"Номер телефону"}
+                    textAlignVertical={"top"}
+                    style={{ padding: 10, paddingBottom: 5 }}
+                    onFocus={() => {
+                      this.setState({ activeDesc: true });
+                    }}
+                    onBlur={() => {
+                      this.setState({ activeDesc: false });
+                    }}
+                  />
+                }
+                errorMessageStyle={{
+                  color: "red",
+                  position: "absolute",
+                }}
+                validators={[
+                  "required",
+                  "minStringLength:13",
+                  "maxStringLength:13",
+                ]}
+                errorMessages={[
+                  "*Заповнити обов'язково",
+                  "не менше і не більше 13 символів",
+                  "не менше і не більше 13 символів",
                 ]}
               ></ValidationComponent>
               <View style={{ top: 10 }}>

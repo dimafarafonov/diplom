@@ -30,6 +30,8 @@ class LocationList extends React.Component {
       locations: Object.entries(this.props.auth.locations || 0) || "",
       users: this.props.home.users,
       user_id: this.props.home.username,
+      title: "Мої авто",
+      sign: "==",
     };
   }
   async componentDidMount() {
@@ -56,7 +58,7 @@ class LocationList extends React.Component {
           }}
         >
           <Text style={{ textAlign: "center" }}>
-            Ви ще не створили жодної локації, якщо ви хочете створити локацію
+            Ви ще не стволири жодної точки з авто, якщо ви хочете створити
             натисніть на кнопку в правому нижньому кутку
           </Text>
         </View>
@@ -79,12 +81,18 @@ class LocationList extends React.Component {
             textAlign: "center",
           }}
         >
-          Мої джерела води
+          {this.state.title}
         </Text>
         <ScrollView style={styles.list}>
           {locations.map(
             (marker, index) =>
-              marker[1].user_id == this.state.user_id && (
+              JSON.parse(
+                `${
+                  this.state.sign == "=="
+                    ? marker[1].user_id == this.state.user_id
+                    : marker[1].user_id != this.state.user_id
+                }`.toLowerCase()
+              ) && (
                 <TouchableOpacity
                   key={index}
                   style={styles.item}
@@ -109,48 +117,52 @@ class LocationList extends React.Component {
                     </Text>
                     <Text>{marker[1].description}</Text>
                   </View>
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      right: 10,
-                      bottom: 5,
-                      zIndex: 9999,
-                    }}
-                    onPress={async () => {
-                      let location = await firebase
-                        .database()
-                        .ref(`/locations/${marker[1].title}`);
-                      await location.remove();
-                      await firebase
-                        .database()
-                        .ref("locations")
-                        .on("value", (snapshot) => {
-                          let locations = snapshot.val();
-                          this.setState({
-                            locations: Object.entries(locations),
+                  {this.state.sign == "==" ? (
+                    <TouchableOpacity
+                      style={{
+                        position: "absolute",
+                        right: 10,
+                        bottom: 5,
+                        zIndex: 9999,
+                      }}
+                      onPress={async () => {
+                        let location = await firebase
+                          .database()
+                          .ref(`/locations/${marker[1].title}`);
+                        await location.remove();
+                        await firebase
+                          .database()
+                          .ref("locations")
+                          .on("value", (snapshot) => {
+                            let locations = snapshot.val();
+                            this.setState({
+                              locations: Object.entries(locations),
+                            });
+                            // this.props._getLocations(locations);
                           });
-                          // this.props._getLocations(locations);
-                        });
-                    }}
-                  >
-                    <FontAwesome name="trash" size={32} color="black" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      right: 5,
-                      bottom: 40,
-                      zIndex: 9999,
-                    }}
-                    onPress={() =>
-                      this.props.navigation.navigate("LocationEdit", {
-                        location_id: marker[1].location_id,
-                        location_title: marker[1].title,
-                      })
-                    }
-                  >
-                    <FontAwesome name="edit" size={32} color="black" />
-                  </TouchableOpacity>
+                      }}
+                    >
+                      <FontAwesome name="trash" size={32} color="black" />
+                    </TouchableOpacity>
+                  ) : null}
+                  {this.state.sign == "==" ? (
+                    <TouchableOpacity
+                      style={{
+                        position: "absolute",
+                        right: 5,
+                        bottom: 40,
+                        zIndex: 9999,
+                      }}
+                      onPress={() =>
+                        this.props.navigation.navigate("LocationEdit", {
+                          location_id: marker[1].location_id,
+                          location_title: marker[1].title,
+                        })
+                      }
+                    >
+                      <FontAwesome name="edit" size={32} color="black" />
+                    </TouchableOpacity>
+                  ) : null}
                 </TouchableOpacity>
               )
           )}
@@ -158,7 +170,21 @@ class LocationList extends React.Component {
         <Button
           icon={<Icon name="plus" size={15} color="white" />}
           containerStyle={{ marginHorizontal: 20, marginBottom: 10 }}
-          title=" Створити нове джерело"
+          title=" Змінити відображення авто"
+          onPress={() => {
+            if (this.state.title == "Мої авто") {
+              console.log("hello", this.state.title);
+              this.setState({ sign: "!=", title: "Всі авто" });
+            } else {
+              console.log("hellopidr");
+              this.setState({ sign: "==", title: "Мої авто" });
+            }
+          }}
+        />
+        <Button
+          icon={<Icon name="plus" size={15} color="white" />}
+          containerStyle={{ marginHorizontal: 20, marginBottom: 10 }}
+          title=" Додати авто"
           onPress={() => {
             // this.props.changeProps("from Map"),
             this.props.navigation.navigate("LocationCreate");

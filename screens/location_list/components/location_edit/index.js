@@ -56,7 +56,7 @@ class LocationEdit extends React.Component {
           this.props.navigation.push("Map");
           Alert.alert(
             "Успішно",
-            "Ви відредагували свою локацію",
+            "Ви відредагували своє авто",
             [
               {
                 text: "OK",
@@ -93,7 +93,7 @@ class LocationEdit extends React.Component {
           }}
         >
           <Text style={{ color: "white", fontSize: 20, bottom: 0 }}>
-            Редагування локації
+            Редагування авто
           </Text>
           <ValidationComponent
             style={styles.input}
@@ -105,7 +105,7 @@ class LocationEdit extends React.Component {
                 multiline={true}
                 numberOfLines={4}
                 value={this.state.labs_results}
-                placeholder={"Результати лабораторних досліджень"}
+                placeholder={"Опис авто"}
                 textAlignVertical={"top"}
                 style={{ padding: 10, paddingBottom: 5 }}
                 onFocus={() => {
@@ -115,6 +115,7 @@ class LocationEdit extends React.Component {
                   this.setState({ activeDesc: false });
                 }}
               />
+
             }
             errorMessageStyle={{
               color: "red",
@@ -142,7 +143,7 @@ class LocationEdit extends React.Component {
                 multiline={true}
                 numberOfLines={1}
                 value={this.state.water_speed}
-                placeholder={"Швидкість потоку води л/с"}
+                placeholder={"Контактний номер телефону"}
                 textAlignVertical={"top"}
                 style={{ padding: 10, paddingBottom: 5 }}
                 onFocus={() => {
@@ -157,11 +158,11 @@ class LocationEdit extends React.Component {
               color: "red",
               position: "absolute",
             }}
-            validators={["required", "minFloat:0.1", "maxFloat:50"]}
+            validators={["required", "minStringLength:13", "maxStringLength:13"]}
             errorMessages={[
               "*Заповнити обов'язково  ",
-              "Мінімальна швидкість 0.1",
-              "Максимальна швидкість 75",
+              "Мінімальна довжина номеру 13",
+              "Максимальна довжина номеру 13",
             ]}
           ></ValidationComponent>
           {/* <ValidationComponent
@@ -203,7 +204,7 @@ class LocationEdit extends React.Component {
                 top: 10,
               }}
             >
-              Наявність черги до джерела
+              Згода з умовами використання
             </Text>
             <View
               style={{

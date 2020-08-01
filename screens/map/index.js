@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-maps";
 
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Image, Dimensions } from "react-native";
 import * as Location from "expo-location";
 import { Button } from "react-native-elements";
 import Seacrh from "./components/search";
@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { changeProps } from "../home/actions";
 import { bindActionCreators } from "redux";
 import * as firebase from "firebase";
+const { height } = Dimensions.get("screen");
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,7 @@ class Map extends Component {
       longitudeDelta: 0.1,
       locations: [],
       radius: 0,
+      one_time: true,
     };
   }
   deg2rad(deg) {
@@ -55,18 +57,22 @@ class Map extends Component {
     }
 
     try {
-      let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
       this.setState({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
-    } catch (error) {
-      
-    }    
+    } catch (error) {}
   }
 
   render() {
-    const { locations, latitude, longitude } = this.state;
+    const { latitude, longitude } = this.state;
+    // console.log("this.state.locations", this.state.locations);
+    // console.log("this.props.auth.locations", this.props.auth.locations);
+    let locations =
+      Object.entries(this.props.auth.locations) || this.state.locations;
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -83,7 +89,14 @@ class Map extends Component {
             ) <
               this.state.radius / 1000 || this.state.radius == 1 ? (
               <Marker
-                style={{ zIndex: 999, position: "absolute" }}
+                style={{
+                  zIndex: 999,
+                  position: "absolute",
+                  // borderColor: "red",
+                  alignContent: "center",
+                  // borderWidth: 1,
+                  padding: 10,
+                }}
                 key={index}
                 onPress={() => {
                   this.props.navigation.push("LocationProfile", {
@@ -96,7 +109,13 @@ class Map extends Component {
                 coordinate={marker[1].coords}
                 title={marker[1].title}
                 description={marker[1].description}
-              />
+              >
+                <Image
+                  // onPress={()=>console.log('dlvpoemvomroes')}
+                  style={{ position: "absolute", width: 20, height: 20 }}
+                  source={require("../../assets/icon.png")}
+                />
+              </Marker>
             ) : null
           )}
           <MapView.Circle
@@ -110,11 +129,11 @@ class Map extends Component {
           />
         </MapView>
         <Button
-          title="Створити локацію"
+          title="Додати авто"
           buttonStyle={{
             position: "absolute",
-            left: 125,
-            top: 5,
+            left: 160,
+            top: height / 1.12,
             borderRadius: 50,
             paddingTop: 5,
             paddingBottom: 10,
@@ -128,11 +147,11 @@ class Map extends Component {
           }}
         ></Button>
         <Button
-          title="Мої локації"
+          title="Доступні авто"
           buttonStyle={{
             position: "absolute",
             left: 5,
-            top: 5,
+            top: height / 1.12,
             borderRadius: 50,
             paddingTop: 5,
             paddingBottom: 10,

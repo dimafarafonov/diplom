@@ -26,7 +26,7 @@ class LocationProfile extends React.Component {
       location_id: this.props.navigation.state.params.location_id,
     };
   }
-  
+
 
   render() {
     const { locations } = this.state;
@@ -63,19 +63,19 @@ class LocationProfile extends React.Component {
             />
             <View style={styles.content}>
               <Text style={styles.title}>{title}</Text>
-              <Text>Швидкість води: {water_speed}л/с</Text>
-              <Text>Якість води - {water_rate}</Text>
-              <Text style={{paddingBottom: 10,}}>Черга до джерела - {if_queue}</Text>
+              <Text>Контактний телефон {water_speed}</Text>
+              <Text>Модель авто / рік - {water_rate}</Text>
+              <Text style={{paddingBottom: 10,}}>Згода з умовами використання - {if_queue}</Text>
               <View style={{backgroundColor: '#F6F8FA', padding: 10, marginBottom: 10,}}>
-                <Text style={{paddingBottom: 10,}}>Можливість під'їзду до джерела:</Text>
+                <Text style={{paddingBottom: 10,}}>Колір:</Text>
                 <Text>{togoal_distance}</Text>
               </View>
               <View style={{backgroundColor: '#F6F8FA', padding: 10, marginBottom: 10,}}>
-                <Text style={{paddingBottom: 10,}}>Результати лабораторних досліджень:</Text>
+                <Text style={{paddingBottom: 10,}}>Опис:</Text>
                 <Text>{labs_results}</Text>
               </View>
               <View style={{backgroundColor: '#F6F8FA', padding: 10, marginBottom: 10,}}>
-                <Text style={{paddingBottom: 10,}}>Опис місця:</Text>
+                <Text style={{paddingBottom: 10,}}>Умови використання:</Text>
                 <Text>{description}</Text>
               </View>
             </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    color, 
+    color,
     fontSize: 22,
     borderBottomColor: color,
     borderBottomWidth: 1,

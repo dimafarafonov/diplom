@@ -72,18 +72,16 @@ class LocationCreate extends React.Component {
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
-        base64: true
+        base64: true,
       });
 
       if (!result.cancelled) {
-        const img = `data:image/png;base64,${result.base64}`
+        const img = `data:image/png;base64,${result.base64}`;
         this.setState({ image: img });
       }
 
-
       // this.setState({ image: result.base64 });
-    } catch (E) {
-    }
+    } catch (E) {}
   };
   render() {
     let { image } = this.state;
@@ -99,7 +97,7 @@ class LocationCreate extends React.Component {
             this.props.navigation.push("Map");
             Alert.alert(
               "Успішно",
-              "Створена нова локація",
+              "Ваш автомобіль додано",
               [
                 {
                   text: "OK",
@@ -144,7 +142,7 @@ class LocationCreate extends React.Component {
               }}
             >
               <Text style={{ color: "white", fontSize: 20, bottom: 0 }}>
-                Створення локації
+                Ваше авто
               </Text>
               <View style={styles.input}>
                 <ValidationComponent
@@ -157,7 +155,7 @@ class LocationCreate extends React.Component {
                       multiline={true}
                       numberOfLines={1}
                       value={this.state.title}
-                      placeholder={"Введіть назву локації"}
+                      placeholder={"Введіть марку Авто"}
                       textAlignVertical={"top"}
                       style={{ padding: 10, paddingBottom: 5 }}
                       onFocus={() => {
@@ -199,7 +197,7 @@ class LocationCreate extends React.Component {
                     multiline={true}
                     numberOfLines={1}
                     value={this.state.water_rate}
-                    placeholder={"Якість води від 1 до 5"}
+                    placeholder={"Модель авто / рік"}
                     textAlignVertical={"top"}
                     style={{ padding: 10, paddingBottom: 5 }}
                     onFocus={() => {
@@ -214,11 +212,47 @@ class LocationCreate extends React.Component {
                   color: "red",
                   position: "absolute",
                 }}
-                validators={["required", "minNumber:1", "maxNumber:5"]}
+                validators={["required", "minStringLength:4", "maxStringLength:10"]}
                 errorMessages={[
                   "*Заповнити обов'язково ",
-                  "Мінімальна оцінка 1",
-                  "Максимальна оцінка 5",
+                  "Мінімальна довжина номеру 4 символи",
+                  "Максимальна довжина номеру 10 символів",
+                ]}
+              ></ValidationComponent>
+              <ValidationComponent
+                style={styles.input}
+                component={
+                  <TextInput
+                    onChangeText={(value) => {
+                      this.setState({ togoal_distance: value });
+                    }}
+                    multiline={true}
+                    numberOfLines={3}
+                    value={this.state.togoal_distance}
+                    placeholder={"Колір"}
+                    textAlignVertical={"top"}
+                    style={{ padding: 10, paddingBottom: 5 }}
+                    onFocus={() => {
+                      this.setState({ activeDesc: true });
+                    }}
+                    onBlur={() => {
+                      this.setState({ activeDesc: false });
+                    }}
+                  />
+                }
+                errorMessageStyle={{
+                  color: "red",
+                  position: "absolute",
+                }}
+                validators={[
+                  "required",
+                  "minStringLength:5",
+                  "maxStringLength:20",
+                ]}
+                errorMessages={[
+                  "*Заповнити обов'язково  ",
+                  "Мінімальна довжина 5 символів",
+                  "Максимальна довжина 20 символів",
                 ]}
               ></ValidationComponent>
               <ValidationComponent
@@ -231,7 +265,7 @@ class LocationCreate extends React.Component {
                     multiline={true}
                     numberOfLines={4}
                     value={this.state.labs_results}
-                    placeholder={"Результати лабораторних досліджень"}
+                    placeholder={"Опис авто"}
                     textAlignVertical={"top"}
                     style={{ padding: 10, paddingBottom: 5 }}
                     onFocus={() => {
@@ -253,7 +287,7 @@ class LocationCreate extends React.Component {
                 ]}
                 errorMessages={[
                   "*Заповнити обов'язково ",
-                  "Мінімальна довжина 30 символів",
+                  "Мінімальна довжина 10 символів",
                   "Максимальна довжина 100 символів",
                 ]}
               ></ValidationComponent>
@@ -267,7 +301,7 @@ class LocationCreate extends React.Component {
                     multiline={true}
                     numberOfLines={5}
                     value={this.state.description}
-                    placeholder={"Опишіть локацію, для чого вона?"}
+                    placeholder={"Умови використання"}
                     textAlignVertical={"top"}
                     style={{ padding: 10, paddingBottom: 5 }}
                     onFocus={() => {
@@ -293,42 +327,7 @@ class LocationCreate extends React.Component {
                   "максимальна довжина 100 символів",
                 ]}
               ></ValidationComponent>
-              <ValidationComponent
-                style={styles.input}
-                component={
-                  <TextInput
-                    onChangeText={(value) => {
-                      this.setState({ togoal_distance: value });
-                    }}
-                    multiline={true}
-                    numberOfLines={3}
-                    value={this.state.togoal_distance}
-                    placeholder={"Можливість під'їзду до джерела"}
-                    textAlignVertical={"top"}
-                    style={{ padding: 10, paddingBottom: 5 }}
-                    onFocus={() => {
-                      this.setState({ activeDesc: true });
-                    }}
-                    onBlur={() => {
-                      this.setState({ activeDesc: false });
-                    }}
-                  />
-                }
-                errorMessageStyle={{
-                  color: "red",
-                  position: "absolute",
-                }}
-                validators={[
-                  "required",
-                  "minStringLength:3",
-                  "maxStringLength:100",
-                ]}
-                errorMessages={[
-                  "*Заповнити обов'язково  ",
-                  "Мінімальна довжина 3 символів",
-                  "Максимальна довжина 100 символів",
-                ]}
-              ></ValidationComponent>
+
               <ValidationComponent
                 style={styles.input}
                 component={
@@ -339,7 +338,7 @@ class LocationCreate extends React.Component {
                     multiline={true}
                     numberOfLines={1}
                     value={this.state.water_speed}
-                    placeholder={"Швидкість потоку води л/с"}
+                    placeholder={"Контактний номер телефону"}
                     textAlignVertical={"top"}
                     style={{ padding: 10, paddingBottom: 5 }}
                     onFocus={() => {
@@ -354,11 +353,11 @@ class LocationCreate extends React.Component {
                   color: "red",
                   position: "absolute",
                 }}
-                validators={["required", "minFloat:0.1", "maxFloat:50"]}
+                validators={["required", "minStringLength:13", "maxStringLength:13"]}
                 errorMessages={[
                   "*Заповнити обов'язково  ",
-                  "Мінімальна швидкість 0.1",
-                  "Максимальна швидкість 75",
+                  "Мінімальна довжина 13",
+                  "Максимальна довжина 13",
                 ]}
               ></ValidationComponent>
               {/* <ValidationComponent
@@ -382,50 +381,50 @@ class LocationCreate extends React.Component {
                       this.setState({ activeDesc: false });
                     }}
                   /> */}
-                  <View style={{bottom:15}}>
-                    <Text
-                      style={{
-                        padding: 10,
-                        backgroundColor: "#465880",
-                        width: "100%",
-                        borderRadius: 5,
-                        color: 'white',
-                        top:10
-                      }}
-                    >
-                      Наявність черги до джерела
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        top:10,
-                      }}
-                    >
-                      <Text>Так</Text>
-                      <RadioButton
-                        value="Так"
-                        status={
-                          this.state.checked === "Так" ? "checked" : "unchecked"
-                        }
-                        onPress={() => {
-                          this.setState({ checked: "Так" });
-                        }}
-                      />
-                      <Text>Ні</Text>
-                      <RadioButton
-                        value="Ні"
-                        status={
-                          this.state.checked === "Ні" ? "checked" : "unchecked"
-                        }
-                        onPress={() => {
-                          this.setState({ checked: "Ні" });
-                        }}
-                      />
-                    </View>
-                  </View>
-                {/* }
+              <View style={{ bottom: 15 }}>
+                <Text
+                  style={{
+                    padding: 10,
+                    backgroundColor: "#465880",
+                    width: "100%",
+                    borderRadius: 5,
+                    color: "white",
+                    top: 10,
+                  }}
+                >
+                  Згода з умовами використання
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    top: 10,
+                  }}
+                >
+                  <Text>Так</Text>
+                  <RadioButton
+                    value="Так"
+                    status={
+                      this.state.checked === "Так" ? "checked" : "unchecked"
+                    }
+                    onPress={() => {
+                      this.setState({ checked: "Так" });
+                    }}
+                  />
+                  <Text>Ні</Text>
+                  <RadioButton
+                    value="Ні"
+                    status={
+                      this.state.checked === "Ні" ? "checked" : "unchecked"
+                    }
+                    onPress={() => {
+                      this.setState({ checked: "Ні" });
+                    }}
+                  />
+                </View>
+              </View>
+              {/* }
                 errorMessageStyle={{
                   color: "red",
                   position: "absolute",
@@ -442,12 +441,17 @@ class LocationCreate extends React.Component {
               {image && (
                 <Image
                   source={{ uri: image }}
-                  style={{ width: "90%", height: 200, marginBottom: 30, marginTop: 10, }}
+                  style={{
+                    width: "90%",
+                    height: 200,
+                    marginBottom: 30,
+                    marginTop: 10,
+                  }}
                 />
               )}
-              <View style={{ bottom: 0, width: "90%"}}>
+              <View style={{ bottom: 0, width: "90%" }}>
                 <Button
-                  title="Виберіть фото для локації"
+                  title="Фото авто"
                   onPress={this._pickImage}
                   buttonStyle={{
                     borderRadius: 30,
@@ -463,18 +467,17 @@ class LocationCreate extends React.Component {
 
               {/* <ValidationComponent
                 component={ */}
-              <View style={{ width: "90%", marginTop: 20, marginBottom: 10}}>
+              <View style={{ width: "90%", marginTop: 20, marginBottom: 10 }}>
                 <Button
                   title={"Створити"}
-
                   onPress={() => {
                     this.form.validate();
                   }}
                 />
                 <Button
                   title={"Назад"}
-                  containerStyle={{marginTop: 10,}}
-                  buttonStyle={{backgroundColor: 'black'}}
+                  containerStyle={{ marginTop: 10 }}
+                  buttonStyle={{ backgroundColor: "black" }}
                   onPress={() => {
                     this.props.navigation.goBack();
                   }}

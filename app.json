@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Gerelo",
-    "slug": "spaceX",
+    "name": "diplom",
+    "slug": "diplom",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -13,13 +13,13 @@
       "backgroundColor": "#0189ec",
       "translucent": false
     },
-    "version": "1.0.0",
+    "version": "1.0.01",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#04405a"
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -31,7 +31,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "adr.gerelo.gerelo",
+      "package": "www.project.project",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
@@ -60,6 +60,6 @@
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ]
     },
-    "description": ""
+    "description": "fix ios header bags"
   }
 }
